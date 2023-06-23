@@ -23,8 +23,12 @@ func TestListProductHandler(t *testing.T) {
 	mockRepo := &MockRepository{}
 	mockRepo.On("FindAll").Return(&products, nil)
 
+	mockErrorResponse := &MockErrorResponse{}
+	mockErrorResponse.On("GenerateResponse", nil)
+
 	sut := &ProductListHandler{
-		Repository: mockRepo,
+		Repository:           mockRepo,
+		ErrorResponseHandler: mockErrorResponse,
 	}
 
 	gin.SetMode(gin.TestMode)

@@ -10,5 +10,5 @@ RUN go mod download
 
 EXPOSE 8080
 
-RUN go install github.com/githubnemo/CompileDaemon
+RUN go install github.com/githubnemo/CompileDaemon@latest
 ENTRYPOINT ../go/bin/CompileDaemon --build="go build main.go" --command="./main"

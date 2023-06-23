@@ -20,3 +20,13 @@ func (mr *MockRepository) FindAll() (*[]entity.Product, error) {
 
 	return args.Get(0).(*[]entity.Product), args.Error(1)
 }
+
+type MockErrorResponse struct {
+	mock.Mock
+}
+
+func (mer *MockErrorResponse) GenerateResponse(error) *entity.ErrorResponse {
+	args := mer.Called()
+
+	return args.Get(0).(*entity.ErrorResponse)
+}

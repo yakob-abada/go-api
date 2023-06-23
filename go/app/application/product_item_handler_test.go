@@ -21,8 +21,12 @@ func TestItemProductHandler(t *testing.T) {
 	mockRepo := &MockRepository{}
 	mockRepo.On("FindById", "test").Return(&product, nil)
 
+	mockErrorResponse := &MockErrorResponse{}
+	mockErrorResponse.On("GenerateResponse", nil)
+
 	sut := &ProductItemHandler{
-		Repository: mockRepo,
+		Repository:           mockRepo,
+		ErrorResponseHandler: mockErrorResponse,
 	}
 
 	gin.SetMode(gin.TestMode)

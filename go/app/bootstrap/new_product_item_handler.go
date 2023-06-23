@@ -6,6 +6,7 @@ import (
 
 	"github.com/yakob-abada/go-api/go/app/application"
 	"github.com/yakob-abada/go-api/go/app/repository"
+	"github.com/yakob-abada/go-api/go/app/service"
 )
 
 func NewProductItemHandler() *application.ProductItemHandler {
@@ -18,5 +19,6 @@ func NewProductItemHandler() *application.ProductItemHandler {
 				os.Getenv("DATABASE_NAME"),
 			),
 		),
+		ErrorResponseHandler: service.NewErrorResponseHandler(),
 	}
 }
