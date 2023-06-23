@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/yakob-abada/go-api/application"
-	"github.com/yakob-abada/go-api/repository"
+	"github.com/yakob-abada/go-api/go/app/application"
+	"github.com/yakob-abada/go-api/go/app/repository"
 )
 
 func NewProductItemHandler() *application.ProductItemHandler {

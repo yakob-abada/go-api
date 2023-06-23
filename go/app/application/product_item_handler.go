@@ -3,7 +3,7 @@ package application
 import (
 	"net/http"
 
-	"github.com/yakob-abada/go-api/repository"
+	"github.com/yakob-abada/go-api/go/app/repository"
 
 	"github.com/gin-gonic/gin"
 )

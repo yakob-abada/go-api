@@ -1,4 +1,4 @@
-module github.com/yakob-abada/go-api
+module github.com/yakob-abada/go-api/go/app
 
 go 1.19
 

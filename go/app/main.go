@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/yakob-abada/go-api/bootstrap"
+	"github.com/yakob-abada/go-api/go/app/bootstrap"
 
 	"github.com/gin-gonic/gin"
 )

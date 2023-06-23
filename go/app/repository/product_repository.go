@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 
-	"github.com/yakob-abada/go-api/entity"
+	"github.com/yakob-abada/go-api/go/app/entity"
 )
 
 type ProductRepository struct {
