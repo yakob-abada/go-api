@@ -1,0 +1,14 @@
+FROM golang:1.19
+
+RUN export GOROOT="/public"
+
+WORKDIR /public
+
+COPY ./app ./
+
+RUN go mod download
+
+EXPOSE 8080
+
+RUN go install github.com/githubnemo/CompileDaemon
+ENTRYPOINT ../go/bin/CompileDaemon --build="go build main.go" --command="./main"

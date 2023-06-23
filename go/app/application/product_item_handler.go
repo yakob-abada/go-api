@@ -13,7 +13,11 @@ type ProductItemHandler struct {
 }
 
 func (pth *ProductItemHandler) GetProduct(c *gin.Context) {
-	result, _ := pth.Repository.FindById(c.Param("id"))
+	result, err := pth.Repository.FindById(c.Param("id"))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+	}
 
 	c.JSON(http.StatusOK, result)
 }

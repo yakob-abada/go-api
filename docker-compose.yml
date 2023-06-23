@@ -3,6 +3,7 @@ services:
     app:
         build:
             context: ./go
+            dockerfile: Dockerfile.${ENV}
         ports:
             - "8080:8080"
         volumes:
