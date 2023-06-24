@@ -8,13 +8,13 @@ import (
 	"github.com/yakob-abada/go-api/go/app/service"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v4"
 )
 
 type SessionListHandler struct {
 	SessionRepository    *repository.SessionRepository
 	UserRepository       *repository.UserRepository
 	ErrorResponseHandler service.ErrorResponse
+	UserAuthorization    *service.UserAuthoriztion
 }
 
 func (slh *SessionListHandler) GetActiveList(c *gin.Context) {
@@ -40,32 +40,10 @@ func (slh *SessionListHandler) GetList(c *gin.Context) {
 }
 
 func (slh *SessionListHandler) Join(c *gin.Context) {
-	token := c.GetHeader("Authorization")
-	token = strings.Replace(token, "Bearer ", "", 1)
-
-	if token == "" {
-		c.JSON(slh.ErrorResponseHandler.GenerateResponse(service.NewUnauthorizedError("user is not authorized")))
-		return
-	}
-
-	claims := &Claims{}
-	var jwtKey = []byte("jwt_secret_key")
-
-	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-		return jwtKey, nil
-	})
+	claims, err := slh.UserAuthorization.Authorize(c)
 
 	if err != nil {
-		if err == jwt.ErrSignatureInvalid {
-			c.JSON(slh.ErrorResponseHandler.GenerateResponse(service.NewUnauthorizedError("user is not authorized")))
-			return
-		}
 		c.JSON(slh.ErrorResponseHandler.GenerateResponse(err))
-		return
-	}
-
-	if !tkn.Valid {
-		c.JSON(slh.ErrorResponseHandler.GenerateResponse(service.NewUnauthorizedError("user is not authorized")))
 		return
 	}
 

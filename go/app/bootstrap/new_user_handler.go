@@ -9,8 +9,8 @@ import (
 	"github.com/yakob-abada/go-api/go/app/service"
 )
 
-func NewAuthHandler() *application.AuthHandler {
-	return &application.AuthHandler{
+func NewUserHandler() *application.UserHandler {
+	return &application.UserHandler{
 		Repository: repository.NewUserRepository(
 			repository.NewMysqlConnection(
 				os.Getenv("DATABASE_USERNAME"),
@@ -20,6 +20,8 @@ func NewAuthHandler() *application.AuthHandler {
 			),
 		),
 		ErrorResponseHandler: service.NewErrorResponseHandler(),
-		JwtKey:               []byte("jwt_secret_key"),
+		UserAuthorization: service.NewUserAuthorization(
+			[]byte("jwt_secret_key"), 8,
+		),
 	}
 }

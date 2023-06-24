@@ -28,5 +28,8 @@ func NewSessionListHandler() *application.SessionListHandler {
 			),
 		),
 		ErrorResponseHandler: service.NewErrorResponseHandler(),
+		UserAuthorization: service.NewUserAuthorization(
+			[]byte("jwt_secret_key"), 8,
+		),
 	}
 }
