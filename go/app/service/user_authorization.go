@@ -22,18 +22,20 @@ type TokenResponse struct {
 }
 
 type UserAuthoriztion struct {
-	jwtKey []byte
+	jwtKey            []byte
+	jwtExpirationTime int8
 }
 
 func NewUserAuthorization(jwtKey []byte, jwtExpirationTime int8) *UserAuthoriztion {
 	return &UserAuthoriztion{
-		jwtKey: jwtKey,
+		jwtKey:            jwtKey,
+		jwtExpirationTime: jwtExpirationTime,
 	}
 }
 
 func (ua *UserAuthoriztion) GenerateToken(username string, user_id int8) (*TokenResponse, error) {
 	// @todo move constant to config value
-	expirationTime := time.Now().Add(5 * time.Minute)
+	expirationTime := time.Now().Add(time.Duration(ua.jwtExpirationTime) * time.Minute)
 
 	claims := &Claims{
 		Username: username,

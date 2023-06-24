@@ -21,7 +21,7 @@ func NewUserHandler() *application.UserHandler {
 		),
 		ErrorResponseHandler: service.NewErrorResponseHandler(),
 		UserAuthorization: service.NewUserAuthorization(
-			[]byte("jwt_secret_key"), 8,
+			[]byte(os.Getenv("JWT_SECRET_KEY")), 8,
 		),
 	}
 }
