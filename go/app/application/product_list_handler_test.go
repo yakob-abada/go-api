@@ -24,7 +24,7 @@ func TestListProductHandler(t *testing.T) {
 	mockRepo.On("FindAll").Return(&products, nil)
 
 	mockErrorResponse := &MockErrorResponse{}
-	mockErrorResponse.On("GenerateResponse", nil)
+	mockErrorResponse.On("GenerateResponse", 200, nil)
 
 	sut := &ProductListHandler{
 		Repository:           mockRepo,

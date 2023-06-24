@@ -22,7 +22,7 @@ func TestItemProductHandler(t *testing.T) {
 	mockRepo.On("FindById", "test").Return(&product, nil)
 
 	mockErrorResponse := &MockErrorResponse{}
-	mockErrorResponse.On("GenerateResponse", nil)
+	mockErrorResponse.On("GenerateResponse", 200, nil)
 
 	sut := &ProductItemHandler{
 		Repository:           mockRepo,

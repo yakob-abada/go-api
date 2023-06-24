@@ -18,7 +18,7 @@ func (pth *ProductItemHandler) GetProduct(c *gin.Context) {
 	result, err := pth.Repository.FindById(c.Param("id"))
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, pth.ErrorResponseHandler.GenerateResponse(err))
+		c.JSON(http.StatusInternalServerError, pth.ErrorResponseHandler.GenerateResponse(http.StatusInternalServerError, err))
 		return
 	}
 

@@ -25,8 +25,8 @@ type MockErrorResponse struct {
 	mock.Mock
 }
 
-func (mer *MockErrorResponse) GenerateResponse(error) *entity.ErrorResponse {
-	args := mer.Called()
+func (mer *MockErrorResponse) GenerateResponse(id uint, err error) *entity.ErrorResponse {
+	args := mer.Called(id, err)
 
 	return args.Get(0).(*entity.ErrorResponse)
 }
