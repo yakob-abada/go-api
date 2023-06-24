@@ -34,7 +34,7 @@ func (ah *AuthHandler) Login(c *gin.Context) {
 	var authUser AtuhUser
 
 	if err := c.ShouldBindJSON(&authUser); err != nil {
-		c.JSON(http.StatusBadRequest, ah.ErrorResponseHandler.GenerateResponse(http.StatusBadRequest, fmt.Errorf("username and/or password are missing")))
+		c.JSON(ah.ErrorResponseHandler.GenerateResponse(service.NewBadRequestError("username and/or password are wrong")))
 		return
 	}
 
@@ -42,7 +42,7 @@ func (ah *AuthHandler) Login(c *gin.Context) {
 	user, err := ah.Repository.FindByUsernameAndPass(authUser.Username, authUser.Password)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, ah.ErrorResponseHandler.GenerateResponse(http.StatusInternalServerError, err))
+		c.JSON(ah.ErrorResponseHandler.GenerateResponse(err))
 		return
 	}
 
@@ -62,7 +62,7 @@ func (ah *AuthHandler) Login(c *gin.Context) {
 	tokenString, err := token.SignedString(ah.JwtKey)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, ah.ErrorResponseHandler.GenerateResponse(http.StatusInternalServerError, fmt.Errorf("failed to generate JWT token")))
+		c.JSON(ah.ErrorResponseHandler.GenerateResponse(fmt.Errorf("failed to generate JWT token")))
 		return
 	}
 

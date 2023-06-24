@@ -18,7 +18,7 @@ func (plh *ProductListHandler) GetProductList(c *gin.Context) {
 	result, err := plh.Repository.FindAll()
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, plh.ErrorResponseHandler.GenerateResponse(http.StatusInternalServerError, err))
+		c.JSON(plh.ErrorResponseHandler.GenerateResponse(err))
 		return
 	}
 

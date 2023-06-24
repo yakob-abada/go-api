@@ -1,7 +1,6 @@
 package application
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -22,10 +21,7 @@ func (slh *SessionListHandler) GetActiveList(c *gin.Context) {
 	result, err := slh.SessionRepository.FindActive()
 
 	if err != nil {
-		c.JSON(
-			http.StatusInternalServerError,
-			slh.ErrorResponseHandler.GenerateResponse(http.StatusInternalServerError, err),
-		)
+		c.JSON(slh.ErrorResponseHandler.GenerateResponse(err))
 		return
 	}
 
@@ -36,10 +32,7 @@ func (slh *SessionListHandler) GetList(c *gin.Context) {
 	result, err := slh.SessionRepository.FindActive()
 
 	if err != nil {
-		c.JSON(
-			http.StatusInternalServerError,
-			slh.ErrorResponseHandler.GenerateResponse(http.StatusInternalServerError, err),
-		)
+		c.JSON(slh.ErrorResponseHandler.GenerateResponse(err))
 		return
 	}
 
@@ -51,10 +44,7 @@ func (slh *SessionListHandler) Join(c *gin.Context) {
 	token = strings.Replace(token, "Bearer ", "", 1)
 
 	if token == "" {
-		c.JSON(
-			http.StatusUnauthorized,
-			slh.ErrorResponseHandler.GenerateResponse(http.StatusUnauthorized, fmt.Errorf("user is not authorized")),
-		)
+		c.JSON(slh.ErrorResponseHandler.GenerateResponse(service.NewUnauthorizedError("user is not authorized")))
 		return
 	}
 
@@ -64,43 +54,36 @@ func (slh *SessionListHandler) Join(c *gin.Context) {
 	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
+
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
-			c.JSON(
-				http.StatusUnauthorized,
-				slh.ErrorResponseHandler.GenerateResponse(http.StatusUnauthorized, fmt.Errorf("user is not authorized")),
-			)
+			c.JSON(slh.ErrorResponseHandler.GenerateResponse(service.NewUnauthorizedError("user is not authorized")))
 			return
 		}
-		c.JSON(
-			http.StatusBadRequest,
-			slh.ErrorResponseHandler.GenerateResponse(http.StatusBadRequest, fmt.Errorf("bard request")),
-		)
+		c.JSON(slh.ErrorResponseHandler.GenerateResponse(err))
 		return
 	}
 
 	if !tkn.Valid {
-		c.JSON(
-			http.StatusUnauthorized,
-			slh.ErrorResponseHandler.GenerateResponse(http.StatusUnauthorized, fmt.Errorf("user is not authorized")),
-		)
+		c.JSON(slh.ErrorResponseHandler.GenerateResponse(service.NewUnauthorizedError("user is not authorized")))
 		return
 	}
 
 	session, err := slh.SessionRepository.FindById(c.Param("id"))
 
+	// @todo need to be refactored.
 	if err != nil {
-		c.JSON(http.StatusNotFound, slh.ErrorResponseHandler.GenerateResponse(http.StatusNotFound, err))
+		c.JSON(slh.ErrorResponseHandler.GenerateResponse(service.NewNotFoundError("session not found")))
 		return
 	}
 
 	err = slh.SessionRepository.Join(session.Id, claims.UserId)
 
 	if err != nil {
-		c.JSON(
-			http.StatusInternalServerError,
-			slh.ErrorResponseHandler.GenerateResponse(http.StatusInternalServerError, err),
-		)
+		if strings.Contains(err.Error(), "Duplicate entry") {
+			err = service.NewUnprocessableEntityError("user has already joined given session")
+		}
+		c.JSON(slh.ErrorResponseHandler.GenerateResponse(err))
 		return
 	}
 
