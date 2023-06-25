@@ -3,7 +3,7 @@ package application
 import (
 	"net/http"
 
-	"github.com/yakob-abada/go-api/go/app/entity"
+	"github.com/yakob-abada/go-api/go/app/model"
 	"github.com/yakob-abada/go-api/go/app/repository"
 	"github.com/yakob-abada/go-api/go/app/service"
 
@@ -63,5 +63,5 @@ func (slh *SessionHandler) Join(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, entity.SuccessResponse{Message: "user has joined successfully"})
+	c.JSON(http.StatusOK, model.SuccessResponse{Message: "user has joined successfully"})
 }

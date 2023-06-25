@@ -2,6 +2,7 @@ package application
 
 import (
 	"github.com/yakob-abada/go-api/go/app/entity"
+	"github.com/yakob-abada/go-api/go/app/model"
 
 	"github.com/stretchr/testify/mock"
 )
@@ -25,8 +26,8 @@ type MockErrorResponse struct {
 	mock.Mock
 }
 
-func (mer *MockErrorResponse) GenerateResponse(err error) (int, *entity.ErrorResponse) {
+func (mer *MockErrorResponse) GenerateResponse(err error) (int, *model.ErrorResponse) {
 	args := mer.Called(err)
 
-	return args.Get(0).(int), args.Get(1).(*entity.ErrorResponse)
+	return args.Get(0).(int), args.Get(1).(*model.ErrorResponse)
 }
