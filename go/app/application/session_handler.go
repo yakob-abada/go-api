@@ -10,14 +10,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type SessionListHandler struct {
+type SessionHandler struct {
 	SessionRepository    *repository.SessionRepository
 	UserRepository       *repository.UserRepository
 	ErrorResponseHandler service.ErrorResponse
 	UserAuthorization    *service.UserAuthoriztion
 }
 
-func (slh *SessionListHandler) GetActiveList(c *gin.Context) {
+func (slh *SessionHandler) GetActiveList(c *gin.Context) {
 	result, err := slh.SessionRepository.FindActive()
 
 	if err != nil {
@@ -28,7 +28,7 @@ func (slh *SessionListHandler) GetActiveList(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func (slh *SessionListHandler) GetList(c *gin.Context) {
+func (slh *SessionHandler) GetList(c *gin.Context) {
 	result, err := slh.SessionRepository.FindActive()
 
 	if err != nil {
@@ -39,7 +39,7 @@ func (slh *SessionListHandler) GetList(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func (slh *SessionListHandler) Join(c *gin.Context) {
+func (slh *SessionHandler) Join(c *gin.Context) {
 	claims, err := slh.UserAuthorization.Authorize(c)
 
 	if err != nil {

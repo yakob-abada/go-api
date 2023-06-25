@@ -9,8 +9,8 @@ import (
 	"github.com/yakob-abada/go-api/go/app/service"
 )
 
-func NewSessionListHandler() *application.SessionListHandler {
-	return &application.SessionListHandler{
+func NewSessionHandler() *application.SessionHandler {
+	return &application.SessionHandler{
 		SessionRepository: repository.NewSessionRepository(
 			repository.NewMysqlConnection(
 				os.Getenv("DATABASE_USERNAME"),
