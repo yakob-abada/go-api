@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/yakob-abada/go-api/go/app/application"
 	"github.com/yakob-abada/go-api/go/app/repository"
 	"github.com/yakob-abada/go-api/go/app/service"
@@ -23,5 +24,6 @@ func NewUserHandler() *application.UserHandler {
 		UserAuthorization: service.NewUserAuthorization(
 			[]byte(os.Getenv("JWT_SECRET_KEY")), 8,
 		),
+		Validate: validator.New(),
 	}
 }

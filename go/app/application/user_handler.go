@@ -4,16 +4,17 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/yakob-abada/go-api/go/app/repository"
 	"github.com/yakob-abada/go-api/go/app/service"
-
-	"github.com/gin-gonic/gin"
 )
 
 type UserHandler struct {
 	Repository           *repository.UserRepository
 	ErrorResponseHandler service.ErrorResponse
 	UserAuthorization    *service.UserAuthoriztion
+	Validate             *validator.Validate
 }
 
 func (ah *UserHandler) Login(c *gin.Context) {
@@ -21,6 +22,12 @@ func (ah *UserHandler) Login(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&authUser); err != nil {
 		c.JSON(ah.ErrorResponseHandler.GenerateResponse(service.NewBadRequestError("username and/or password are wrong")))
+		return
+	}
+
+	// @todo improve error message using translation
+	if err := ah.Validate.Struct(authUser); err != nil {
+		c.JSON(ah.ErrorResponseHandler.GenerateResponse(service.NewBadRequestError(err.Error())))
 		return
 	}
 
