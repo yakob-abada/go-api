@@ -6,6 +6,8 @@ import (
 	"github.com/yakob-abada/go-api/go/app/entity"
 )
 
+var now = time.Now()
+
 func NewActiveSessionSpecification() *ActiveSessionSpecification {
 	return &ActiveSessionSpecification{}
 }
@@ -13,5 +15,5 @@ func NewActiveSessionSpecification() *ActiveSessionSpecification {
 type ActiveSessionSpecification struct{}
 
 func (ass *ActiveSessionSpecification) IsSatisfied(session *entity.Session) bool {
-	return (!session.IsFull) && session.Time.After(time.Now())
+	return (!session.IsFull) && session.Time.After(now)
 }
