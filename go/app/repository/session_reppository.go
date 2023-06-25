@@ -117,3 +117,27 @@ func (sr *SessionRepository) Join(sessionId int8, userId int8) error {
 
 	return err
 }
+
+func (sr *SessionRepository) SetSessionIsFullSatistfaction(sessionId int8) error {
+	db, err := sr.dBConnection.Connect()
+
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Query(`
+		UPDATE session SET is_full = 1 WHERE id =
+		(
+			select id from (
+				SELECT count(session_id) AS count, session.id, class.max_participant AS max_participant 
+				FROM session 
+				INNER JOIN class ON class.id = session.class_id
+				LEFT JOIN session_user ON session.id = session_id
+				WHERE session.id = ?
+				HAVING count >= max_participant
+			) x
+		);
+	`, sessionId)
+
+	return err
+}

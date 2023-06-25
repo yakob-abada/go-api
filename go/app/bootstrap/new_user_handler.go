@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/yakob-abada/go-api/go/app/application"
@@ -11,6 +12,7 @@ import (
 )
 
 func NewUserHandler() *application.UserHandler {
+	jwtExpirationTime, _ := strconv.ParseInt(os.Getenv("JWT_EXPIRATION"), 10, 8)
 	return &application.UserHandler{
 		Repository: repository.NewUserRepository(
 			repository.NewMysqlConnection(
@@ -22,7 +24,7 @@ func NewUserHandler() *application.UserHandler {
 		),
 		ErrorResponseHandler: service.NewErrorResponseHandler(),
 		UserAuthorization: service.NewUserAuthorization(
-			[]byte(os.Getenv("JWT_SECRET_KEY")), 8,
+			[]byte(os.Getenv("JWT_SECRET_KEY")), int8(jwtExpirationTime),
 		),
 		Validate: validator.New(),
 	}

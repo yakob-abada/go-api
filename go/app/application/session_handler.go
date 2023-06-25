@@ -2,7 +2,6 @@ package application
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/yakob-abada/go-api/go/app/repository"
 	"github.com/yakob-abada/go-api/go/app/service"
@@ -11,10 +10,11 @@ import (
 )
 
 type SessionHandler struct {
-	SessionRepository    *repository.SessionRepository
-	UserRepository       *repository.UserRepository
-	ErrorResponseHandler service.ErrorResponse
-	UserAuthorization    *service.UserAuthoriztion
+	SessionRepository       *repository.SessionRepository
+	UserRepository          *repository.UserRepository
+	ErrorResponseHandler    service.ErrorResponse
+	UserAuthorization       *service.UserAuthoriztion
+	SessionUserJoinMediator *SessionUserJoinMediator
 }
 
 func (slh *SessionHandler) GetActiveList(c *gin.Context) {
@@ -51,16 +51,13 @@ func (slh *SessionHandler) Join(c *gin.Context) {
 
 	// @todo need to be refactored.
 	if err != nil {
-		c.JSON(slh.ErrorResponseHandler.GenerateResponse(service.NewNotFoundError("session not found")))
+		c.JSON(slh.ErrorResponseHandler.GenerateResponse(err))
 		return
 	}
 
-	err = slh.SessionRepository.Join(session.Id, claims.UserId)
+	err = slh.SessionUserJoinMediator.Mediate(session, claims.UserId)
 
 	if err != nil {
-		if strings.Contains(err.Error(), "Duplicate entry") {
-			err = service.NewUnprocessableEntityError("user has already joined given session")
-		}
 		c.JSON(slh.ErrorResponseHandler.GenerateResponse(err))
 		return
 	}

@@ -30,6 +30,7 @@ func (dbc *MysqlConnection) Connect() (*sql.DB, error) {
 		Addr:                 dbc.Addr,
 		DBName:               dbc.DBName,
 		AllowNativePasswords: true,
+		ParseTime:            true,
 	}
 
 	db, err := sql.Open("mysql", cfg.FormatDSN())
