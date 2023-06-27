@@ -44,37 +44,6 @@ INSERT INTO `class` VALUES (1,'Spin',1,30,'07:00:00',3),(2,'Sweat 30',2,30,'09:0
 UNLOCK TABLES;
 
 --
--- Table structure for table `product`
---
-
-DROP TABLE IF EXISTS `product`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `product` (
-  `sku` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `price` decimal(20,0) NOT NULL,
-  `product_type` varchar(45) NOT NULL,
-  `size` decimal(20,0) DEFAULT NULL,
-  `weight` decimal(20,0) DEFAULT NULL,
-  `height` decimal(20,0) DEFAULT NULL,
-  `length` decimal(20,0) DEFAULT NULL,
-  `width` decimal(20,0) DEFAULT NULL,
-  PRIMARY KEY (`sku`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `product`
---
-
-LOCK TABLES `product` WRITE;
-/*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES ('test','ProductName',100,'dvd',200,NULL,NULL,NULL,NULL);
-/*!40000 ALTER TABLE `product` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `session`
 --
 

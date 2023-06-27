@@ -11,9 +11,9 @@ import (
 )
 
 type UserHandler struct {
-	Repository           *repository.UserRepository
+	Repository           repository.IUserRepository
 	ErrorResponseHandler service.ErrorResponse
-	UserAuthorization    *service.UserAuthoriztion
+	UserAuthorization    service.IUserAuthoriztion
 	Validate             *validator.Validate
 }
 

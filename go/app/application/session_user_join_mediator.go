@@ -8,8 +8,12 @@ import (
 	"github.com/yakob-abada/go-api/go/app/service"
 )
 
+type ISessionUserJoinMediator interface {
+	Mediate(session *entity.Session, userId int8) error
+}
+
 func NewSessionUserJoinMediator(
-	sessionRepository *repository.SessionRepository,
+	sessionRepository repository.ISessionRepository,
 	activeSessionSpecification *ActiveSessionSpecification,
 ) *SessionUserJoinMediator {
 	return &SessionUserJoinMediator{
@@ -19,7 +23,7 @@ func NewSessionUserJoinMediator(
 }
 
 type SessionUserJoinMediator struct {
-	sessionRepository          *repository.SessionRepository
+	sessionRepository          repository.ISessionRepository
 	activeSessionSpecification *ActiveSessionSpecification
 }
 

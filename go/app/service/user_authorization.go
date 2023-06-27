@@ -21,6 +21,11 @@ type TokenResponse struct {
 	Expires time.Time `json:"expires"`
 }
 
+type IUserAuthoriztion interface {
+	GenerateToken(username string, userId int8) (*TokenResponse, error)
+	Authorize(c *gin.Context) (*Claims, error)
+}
+
 type UserAuthoriztion struct {
 	jwtKey            []byte
 	jwtExpirationTime int8
@@ -33,13 +38,13 @@ func NewUserAuthorization(jwtKey []byte, jwtExpirationTime int8) *UserAuthorizti
 	}
 }
 
-func (ua *UserAuthoriztion) GenerateToken(username string, user_id int8) (*TokenResponse, error) {
+func (ua *UserAuthoriztion) GenerateToken(username string, userId int8) (*TokenResponse, error) {
 	// @todo move constant to config value
 	expirationTime := time.Now().Add(time.Duration(ua.jwtExpirationTime) * time.Minute)
 
 	claims := &Claims{
 		Username: username,
-		UserId:   user_id,
+		UserId:   userId,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},

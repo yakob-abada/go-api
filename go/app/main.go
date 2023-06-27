@@ -8,8 +8,6 @@ import (
 
 func main() {
 	r := gin.Default()
-	r.GET("/product/:id", bootstrap.NewProductItemHandler().GetProduct)
-	r.GET("/product", bootstrap.NewProductListHandler().GetProductList)
 	r.GET("/active-session", bootstrap.NewSessionHandler().GetActiveList)
 	r.GET("/session", bootstrap.NewSessionHandler().GetList)
 	r.POST("/session/:id/join", bootstrap.NewSessionHandler().Join) //@todo choose put or post

@@ -6,6 +6,10 @@ import (
 	"github.com/yakob-abada/go-api/go/app/entity"
 )
 
+type IUserRepository interface {
+	FindByUsernameAndPass(username string, password string) (*entity.User, error)
+}
+
 type UserRepository struct {
 	dBConnection DatabaseConnection
 }

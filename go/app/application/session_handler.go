@@ -11,11 +11,11 @@ import (
 )
 
 type SessionHandler struct {
-	SessionRepository       *repository.SessionRepository
-	UserRepository          *repository.UserRepository
+	SessionRepository       repository.ISessionRepository
+	UserRepository          repository.IUserRepository
 	ErrorResponseHandler    service.ErrorResponse
-	UserAuthorization       *service.UserAuthoriztion
-	SessionUserJoinMediator *SessionUserJoinMediator
+	UserAuthorization       service.IUserAuthoriztion
+	SessionUserJoinMediator ISessionUserJoinMediator
 }
 
 func (slh *SessionHandler) GetActiveList(c *gin.Context) {
@@ -30,7 +30,7 @@ func (slh *SessionHandler) GetActiveList(c *gin.Context) {
 }
 
 func (slh *SessionHandler) GetList(c *gin.Context) {
-	result, err := slh.SessionRepository.FindActive()
+	result, err := slh.SessionRepository.FindAll()
 
 	if err != nil {
 		c.JSON(slh.ErrorResponseHandler.GenerateResponse(err))
