@@ -14,66 +14,67 @@ import (
 )
 
 func TestSessionHandlerGetList(t *testing.T) {
-	var mockSessionRepository = &repository.MockSessionRepository{}
-	var mockUserRepository = &repository.MockUserRepository{}
-	var mockErrorResponse = &service.MockErrorResponse{}
-	var mockUserAuthorization = &service.MockUserAuthoriztion{}
-	var mockSessionUserJoinMediator = &MockSessionUserJoinMediator{}
+	t.Run("Success", func(t *testing.T) {
+		var mockSessionRepository = &repository.MockSessionRepository{}
+		var mockUserRepository = &repository.MockUserRepository{}
+		var mockErrorResponse = &service.MockErrorResponse{}
+		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockSessionUserJoinMediator = &MockSessionUserJoinMediator{}
+		var time, _ = time.Parse("2006-01-02 15:04:00", "2023-06-26 07:00:00")
 
-	var time, _ = time.Parse("2006-01-02 15:04:00", "2023-06-26 07:00:00")
+		var sessions = []entity.Session{
+			{
+				Id:       1,
+				Time:     time,
+				Name:     "Session name",
+				Duration: 30,
+				IsFull:   false,
+			},
+		}
 
-	var sessions = []entity.Session{
-		{
-			Id:       1,
-			Time:     time,
-			Name:     "Session name",
-			Duration: 30,
-			IsFull:   false,
-		},
-	}
+		mockSessionRepository.On("FindAll").Return(sessions, nil)
+		gin.SetMode(gin.TestMode)
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
 
-	mockSessionRepository.On("FindAll").Return(sessions, nil)
-	gin.SetMode(gin.TestMode)
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+		sut := &SessionHandler{
+			SessionRepository:       mockSessionRepository,
+			UserRepository:          mockUserRepository,
+			ErrorResponseHandler:    mockErrorResponse,
+			UserAuthorization:       mockUserAuthorization,
+			SessionUserJoinMediator: mockSessionUserJoinMediator,
+		}
 
-	sut := &SessionHandler{
-		SessionRepository:       mockSessionRepository,
-		UserRepository:          mockUserRepository,
-		ErrorResponseHandler:    mockErrorResponse,
-		UserAuthorization:       mockUserAuthorization,
-		SessionUserJoinMediator: mockSessionUserJoinMediator,
-	}
+		sut.GetList(c)
+		mockSessionRepository.AssertNumberOfCalls(t, "FindAll", 1)
+	})
 
-	sut.GetList(c)
-	mockSessionRepository.AssertNumberOfCalls(t, "FindAll", 1)
-}
+	t.Run("fail", func(t *testing.T) {
+		var mockSessionRepository = &repository.MockSessionRepository{}
+		var mockUserRepository = &repository.MockUserRepository{}
+		var mockErrorResponse = &service.MockErrorResponse{}
+		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockSessionUserJoinMediator = &MockSessionUserJoinMediator{}
 
-func TestSessionHandlerGetListFailed(t *testing.T) {
-	var mockSessionRepository = &repository.MockSessionRepository{}
-	var mockUserRepository = &repository.MockUserRepository{}
-	var mockErrorResponse = &service.MockErrorResponse{}
-	var mockUserAuthorization = &service.MockUserAuthoriztion{}
-	var mockSessionUserJoinMediator = &MockSessionUserJoinMediator{}
-	var sessions []entity.Session
+		var sessions []entity.Session
+		mockSessionRepository.On("FindAll").Return(sessions, fmt.Errorf("something went wrongss"))
+		mockErrorResponse.On("GenerateResponse", fmt.Errorf("something went wrongss")).Return(500, &model.ErrorResponse{Error: "something went wrong"}).Once()
 
-	mockSessionRepository.On("FindAll").Return(sessions, fmt.Errorf("something went wrongss"))
-	mockErrorResponse.On("GenerateResponse", fmt.Errorf("something went wrongss")).Return(500, &model.ErrorResponse{Error: "something went wrong"}).Once()
+		gin.SetMode(gin.TestMode)
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
 
-	gin.SetMode(gin.TestMode)
-	w := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(w)
+		sut := &SessionHandler{
+			SessionRepository:       mockSessionRepository,
+			UserRepository:          mockUserRepository,
+			ErrorResponseHandler:    mockErrorResponse,
+			UserAuthorization:       mockUserAuthorization,
+			SessionUserJoinMediator: mockSessionUserJoinMediator,
+		}
 
-	sut := &SessionHandler{
-		SessionRepository:       mockSessionRepository,
-		UserRepository:          mockUserRepository,
-		ErrorResponseHandler:    mockErrorResponse,
-		UserAuthorization:       mockUserAuthorization,
-		SessionUserJoinMediator: mockSessionUserJoinMediator,
-	}
+		sut.GetList(c)
 
-	sut.GetList(c)
-
-	mockSessionRepository.AssertNumberOfCalls(t, "FindAll", 1)
-	mockErrorResponse.AssertNumberOfCalls(t, "GenerateResponse", 1)
+		mockSessionRepository.AssertNumberOfCalls(t, "FindAll", 1)
+		mockErrorResponse.AssertNumberOfCalls(t, "GenerateResponse", 1)
+	})
 }
