@@ -7,16 +7,23 @@ import (
 	"time"
 
 	"github.com/yakob-abada/go-api/go/app/entity"
+	"github.com/yakob-abada/go-api/go/app/model"
 	"github.com/yakob-abada/go-api/go/app/repository"
 	"github.com/yakob-abada/go-api/go/app/service"
 
 	"github.com/gin-gonic/gin"
 )
 
-func TestSessionHandler(t *testing.T) {
-	time, _ := time.Parse("2006-01-02 15:04:00", "2023-06-26 07:00:00")
+func TestSessionHandlerGetList(t *testing.T) {
+	var mockSessionRepository = &repository.MockSessionRepository{}
+	var mockUserRepository = &repository.MockUserRepository{}
+	var mockErrorResponse = &service.MockErrorResponse{}
+	var mockUserAuthorization = &service.MockUserAuthoriztion{}
+	var mockSessionUserJoinMediator = &MockSessionUserJoinMediator{}
 
-	sessions := []entity.Session{
+	var time, _ = time.Parse("2006-01-02 15:04:00", "2023-06-26 07:00:00")
+
+	var sessions = []entity.Session{
 		{
 			Id:       1,
 			Time:     time,
@@ -26,45 +33,48 @@ func TestSessionHandler(t *testing.T) {
 		},
 	}
 
-	mockSessionRepository := &repository.MockSessionRepository{}
-	mockUserRepository := &repository.MockUserRepository{}
-	mockErrorResponse := &service.MockErrorResponse{}
-	mockUserAuthorization := &service.MockUserAuthoriztion{}
-	mockSessionUserJoinMediator := &MockSessionUserJoinMediator{}
+	mockSessionRepository.On("FindAll").Return(&sessions, nil)
+	gin.SetMode(gin.TestMode)
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
 
-	t.Run("GetList", func(t *testing.T) {
-		mockSessionRepository.On("FindAll").Return(&sessions, nil)
-		gin.SetMode(gin.TestMode)
-		w := httptest.NewRecorder()
-		c, _ := gin.CreateTestContext(w)
+	sut := &SessionHandler{
+		SessionRepository:       mockSessionRepository,
+		UserRepository:          mockUserRepository,
+		ErrorResponseHandler:    mockErrorResponse,
+		UserAuthorization:       mockUserAuthorization,
+		SessionUserJoinMediator: mockSessionUserJoinMediator,
+	}
 
-		sut := &SessionHandler{
-			SessionRepository:       mockSessionRepository,
-			UserRepository:          mockUserRepository,
-			ErrorResponseHandler:    mockErrorResponse,
-			UserAuthorization:       mockUserAuthorization,
-			SessionUserJoinMediator: mockSessionUserJoinMediator,
-		}
+	sut.GetList(c)
+	mockSessionRepository.AssertNumberOfCalls(t, "FindAll", 1)
+}
 
-		sut.GetList(c)
-	})
+func TestSessionHandlerGetListFailed(t *testing.T) {
+	var mockSessionRepository = &repository.MockSessionRepository{}
+	var mockUserRepository = &repository.MockUserRepository{}
+	var mockErrorResponse = &service.MockErrorResponse{}
+	var mockUserAuthorization = &service.MockUserAuthoriztion{}
+	var mockSessionUserJoinMediator = &MockSessionUserJoinMediator{}
+	var sessions []entity.Session
 
-	t.Run("GetListFail", func(t *testing.T) {
-		mockSessionRepository.On("FindAll").Return(nil, fmt.Errorf("something went wrong"))
-		mockErrorResponse.On("GenerateResponse", 500, fmt.Errorf("something went wrong"))
+	mockSessionRepository.On("FindAll").Return(sessions, fmt.Errorf("something went wrongss"))
+	mockErrorResponse.On("GenerateResponse", fmt.Errorf("something went wrongss")).Return(500, &model.ErrorResponse{Error: "something went wrong"}).Once()
 
-		gin.SetMode(gin.TestMode)
-		w := httptest.NewRecorder()
-		c, _ := gin.CreateTestContext(w)
+	gin.SetMode(gin.TestMode)
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
 
-		sut := &SessionHandler{
-			SessionRepository:       mockSessionRepository,
-			UserRepository:          mockUserRepository,
-			ErrorResponseHandler:    mockErrorResponse,
-			UserAuthorization:       mockUserAuthorization,
-			SessionUserJoinMediator: mockSessionUserJoinMediator,
-		}
+	sut := &SessionHandler{
+		SessionRepository:       mockSessionRepository,
+		UserRepository:          mockUserRepository,
+		ErrorResponseHandler:    mockErrorResponse,
+		UserAuthorization:       mockUserAuthorization,
+		SessionUserJoinMediator: mockSessionUserJoinMediator,
+	}
 
-		sut.GetList(c)
-	})
+	sut.GetList(c)
+
+	mockSessionRepository.AssertNumberOfCalls(t, "FindAll", 1)
+	mockErrorResponse.AssertNumberOfCalls(t, "GenerateResponse", 1)
 }

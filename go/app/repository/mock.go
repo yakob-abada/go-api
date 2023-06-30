@@ -16,16 +16,16 @@ func (msr *MockSessionRepository) FindById(id string) (*entity.Session, error) {
 	return args.Get(0).(*entity.Session), args.Error(1)
 }
 
-func (msr *MockSessionRepository) FindAll() (*[]entity.Session, error) {
+func (msr *MockSessionRepository) FindAll() ([]entity.Session, error) {
 	args := msr.Called()
 
-	return args.Get(0).(*[]entity.Session), args.Error(1)
+	return args.Get(0).([]entity.Session), args.Error(1)
 }
 
-func (msr *MockSessionRepository) FindActive() (*[]entity.Session, error) {
+func (msr *MockSessionRepository) FindActive() ([]entity.Session, error) {
 	args := msr.Called()
 
-	return args.Get(0).(*[]entity.Session), args.Error(1)
+	return args.Get(0).([]entity.Session), args.Error(1)
 }
 
 func (msr *MockSessionRepository) Join(sessionId int8, userId int8) error {

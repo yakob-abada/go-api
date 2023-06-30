@@ -8,8 +8,8 @@ import (
 
 type ISessionRepository interface {
 	FindById(id string) (*entity.Session, error)
-	FindAll() (*[]entity.Session, error)
-	FindActive() (*[]entity.Session, error)
+	FindAll() ([]entity.Session, error)
+	FindActive() ([]entity.Session, error)
 	Join(sessionId int8, userId int8) error
 	SetSessionIsFullSatistfaction(sessionId int8) error
 }
@@ -47,8 +47,8 @@ func (sr *SessionRepository) FindById(id string) (*entity.Session, error) {
 	return &session, nil
 }
 
-func (sr *SessionRepository) FindAll() (*[]entity.Session, error) {
-	var sessions []entity.Session = []entity.Session{}
+func (sr *SessionRepository) FindAll() ([]entity.Session, error) {
+	var sessions []entity.Session
 
 	db, err := sr.dBConnection.Connect()
 
@@ -77,11 +77,11 @@ func (sr *SessionRepository) FindAll() (*[]entity.Session, error) {
 		sessions = append(sessions, session)
 	}
 
-	return &sessions, nil
+	return sessions, nil
 }
 
-func (sr *SessionRepository) FindActive() (*[]entity.Session, error) {
-	var sessions []entity.Session = []entity.Session{}
+func (sr *SessionRepository) FindActive() ([]entity.Session, error) {
+	var sessions []entity.Session
 
 	db, err := sr.dBConnection.Connect()
 
@@ -111,7 +111,7 @@ func (sr *SessionRepository) FindActive() (*[]entity.Session, error) {
 		sessions = append(sessions, session)
 	}
 
-	return &sessions, nil
+	return sessions, nil
 }
 
 func (sr *SessionRepository) Join(sessionId int8, userId int8) error {
