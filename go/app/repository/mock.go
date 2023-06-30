@@ -13,6 +13,10 @@ type MockSessionRepository struct {
 func (msr *MockSessionRepository) FindById(id string) (*entity.Session, error) {
 	args := msr.Called(id)
 
+	if args.Error(1) != nil {
+		return nil, args.Error(1)
+	}
+
 	return args.Get(0).(*entity.Session), args.Error(1)
 }
 
