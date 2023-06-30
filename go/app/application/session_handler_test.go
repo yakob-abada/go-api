@@ -6,12 +6,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/yakob-abada/go-api/go/app/entity"
 	"github.com/yakob-abada/go-api/go/app/model"
 	"github.com/yakob-abada/go-api/go/app/repository"
 	"github.com/yakob-abada/go-api/go/app/service"
-
-	"github.com/gin-gonic/gin"
 )
 
 func TestSessionHandlerGetList(t *testing.T) {
@@ -33,7 +32,7 @@ func TestSessionHandlerGetList(t *testing.T) {
 		},
 	}
 
-	mockSessionRepository.On("FindAll").Return(&sessions, nil)
+	mockSessionRepository.On("FindAll").Return(sessions, nil)
 	gin.SetMode(gin.TestMode)
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
