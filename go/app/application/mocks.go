@@ -14,3 +14,13 @@ func (msujm *MockSessionUserJoinMediator) Mediate(session *entity.Session, userI
 
 	return args.Error(0)
 }
+
+type MockValidate struct {
+	mock.Mock
+}
+
+func (mv *MockValidate) Struct(s interface{}) error {
+	args := mv.Called(s)
+
+	return args.Error(0)
+}

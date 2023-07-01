@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
+	"github.com/yakob-abada/go-api/go/app/domain"
 	"github.com/yakob-abada/go-api/go/app/repository"
 	"github.com/yakob-abada/go-api/go/app/service"
 )
@@ -14,14 +14,14 @@ type UserHandler struct {
 	Repository           repository.IUserRepository
 	ErrorResponseHandler service.ErrorResponse
 	UserAuthorization    service.IUserAuthoriztion
-	Validate             *validator.Validate
+	Validate             domain.Validate
 }
 
 func (ah *UserHandler) Login(c *gin.Context) {
 	var authUser service.AuthUser
 
 	if err := c.ShouldBindJSON(&authUser); err != nil {
-		c.JSON(ah.ErrorResponseHandler.GenerateResponse(service.NewBadRequestError("username and/or password are wrong")))
+		c.JSON(ah.ErrorResponseHandler.GenerateResponse(service.NewBadRequestError("JSON body request problem")))
 		return
 	}
 
