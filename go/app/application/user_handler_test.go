@@ -174,7 +174,7 @@ func TestLogin(t *testing.T) {
 		mockUserAuthorization.On("GenerateToken", user.Username, user.Id).Return(nil, fmt.Errorf("failed to generate JWT token"))
 		mockUserRepository.On("FindByUsername", "username").Return(&user, nil)
 		mockAppCrypto.On("CompareHashAndPassword", []byte("hashedPassword"), []byte("password")).Return(fmt.Errorf("invalid auth"))
-		mockErrorResponse.On("GenerateResponse", service.NewUnauthorizedError("Invalid credentials")).Return(405, &model.ErrorResponse{Error: "Invalid credentials"}).Once()
+		mockErrorResponse.On("GenerateResponse", service.NewUnauthorizedError("Invalid credentials")).Return(401, &model.ErrorResponse{Error: "Invalid credentials"}).Once()
 		gin.SetMode(gin.TestMode)
 
 		w := httptest.NewRecorder()

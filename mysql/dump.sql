@@ -122,7 +122,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Jakob','Abada','yakob.abada','test',1),(2,'Sam','Spark','sspark','test',1),(3,'Abdallah','Abada','a.abada','test',1),(4,'Tom','Hanks','tomh','test',1);
+INSERT INTO `user` VALUES (1,'Jakob','Abada','yakob.abada','$2a$14$ajq8Q7fbtFRQvXpdCq7Jcuy.Rx1h/L4J60Otx.gyNLbAYctGMJ9tK',1),(2,'Sam','Spark','sspark','$2a$14$ajq8Q7fbtFRQvXpdCq7Jcuy.Rx1h/L4J60Otx.gyNLbAYctGMJ9tK',1),(3,'Abdallah','Abada','a.abada','$2a$14$ajq8Q7fbtFRQvXpdCq7Jcuy.Rx1h/L4J60Otx.gyNLbAYctGMJ9tK',1),(4,'Tom','Hanks','tomh','$2a$14$ajq8Q7fbtFRQvXpdCq7Jcuy.Rx1h/L4J60Otx.gyNLbAYctGMJ9tK',1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
