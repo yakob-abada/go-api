@@ -1,5 +1,5 @@
 package domain
 
-type Validate interface {
+type IValidate interface {
 	Struct(interface{}) error
 }

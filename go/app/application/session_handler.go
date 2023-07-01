@@ -11,10 +11,10 @@ import (
 )
 
 type SessionHandler struct {
-	SessionRepository       domain.SessionRepository
-	UserRepository          domain.UserRepository
+	SessionRepository       domain.ISessionRepository
+	UserRepository          domain.IUserRepository
 	ErrorResponseHandler    service.ErrorResponse
-	UserAuthorization       domain.UserAuthoriztion
+	UserAuthorization       domain.IUserAuthoriztion
 	SessionUserJoinMediator ISessionUserJoinMediator
 }
 

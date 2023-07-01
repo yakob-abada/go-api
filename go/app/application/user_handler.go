@@ -10,11 +10,11 @@ import (
 )
 
 type UserHandler struct {
-	Repository           domain.UserRepository
+	Repository           domain.IUserRepository
 	ErrorResponseHandler service.ErrorResponse
-	UserAuthorization    domain.UserAuthoriztion
-	Validate             domain.Validate
-	Encryption           domain.AppCrypto
+	UserAuthorization    domain.IUserAuthoriztion
+	Validate             domain.IValidate
+	Encryption           domain.IAppCrypto
 }
 
 func (ah *UserHandler) Login(c *gin.Context) {

@@ -13,7 +13,7 @@ type ISessionUserJoinMediator interface {
 }
 
 func NewSessionUserJoinMediator(
-	sessionRepository domain.SessionRepository,
+	sessionRepository domain.ISessionRepository,
 	activeSessionSpecification *ActiveSessionSpecification,
 ) *SessionUserJoinMediator {
 	return &SessionUserJoinMediator{
@@ -23,7 +23,7 @@ func NewSessionUserJoinMediator(
 }
 
 type SessionUserJoinMediator struct {
-	sessionRepository          domain.SessionRepository
+	sessionRepository          domain.ISessionRepository
 	activeSessionSpecification *ActiveSessionSpecification
 }
 
