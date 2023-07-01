@@ -3,18 +3,18 @@ package application
 import (
 	"net/http"
 
+	"github.com/yakob-abada/go-api/go/app/domain"
 	"github.com/yakob-abada/go-api/go/app/model"
-	"github.com/yakob-abada/go-api/go/app/repository"
 	"github.com/yakob-abada/go-api/go/app/service"
 
 	"github.com/gin-gonic/gin"
 )
 
 type SessionHandler struct {
-	SessionRepository       repository.ISessionRepository
-	UserRepository          repository.IUserRepository
+	SessionRepository       domain.SessionRepository
+	UserRepository          domain.UserRepository
 	ErrorResponseHandler    service.ErrorResponse
-	UserAuthorization       service.IUserAuthoriztion
+	UserAuthorization       domain.UserAuthoriztion
 	SessionUserJoinMediator ISessionUserJoinMediator
 }
 

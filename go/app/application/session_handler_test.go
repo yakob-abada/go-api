@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/yakob-abada/go-api/go/app/domain"
 	"github.com/yakob-abada/go-api/go/app/entity"
 	"github.com/yakob-abada/go-api/go/app/model"
 	"github.com/yakob-abada/go-api/go/app/repository"
@@ -96,7 +97,7 @@ func TestSessionHandlerJoin(t *testing.T) {
 			IsFull:   false,
 		}
 
-		var claims = service.Claims{
+		var claims = domain.Claims{
 			Username: "test",
 			UserId:   1,
 		}
@@ -129,7 +130,7 @@ func TestSessionHandlerJoin(t *testing.T) {
 		var mockUserAuthorization = &service.MockUserAuthoriztion{}
 		var mockSessionUserJoinMediator = &MockSessionUserJoinMediator{}
 
-		var claims = service.Claims{
+		var claims = domain.Claims{
 			Username: "test",
 			UserId:   1,
 		}
@@ -171,7 +172,7 @@ func TestSessionHandlerJoin(t *testing.T) {
 			IsFull:   false,
 		}
 
-		var claims = service.Claims{
+		var claims = domain.Claims{
 			Username: "test",
 			UserId:   1,
 		}

@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
+	"github.com/yakob-abada/go-api/go/app/domain"
 	"github.com/yakob-abada/go-api/go/app/model"
 )
 
@@ -20,20 +21,20 @@ type MockUserAuthoriztion struct {
 	mock.Mock
 }
 
-func (mua *MockUserAuthoriztion) GenerateToken(username string, userId int8) (*TokenResponse, error) {
+func (mua *MockUserAuthoriztion) GenerateToken(username string, userId int8) (*domain.TokenResponse, error) {
 	args := mua.Called(username, userId)
 
 	if args.Error(1) != nil {
 		return nil, args.Error(1)
 	}
 
-	return args.Get(0).(*TokenResponse), args.Error(1)
+	return args.Get(0).(*domain.TokenResponse), args.Error(1)
 }
 
-func (mua *MockUserAuthoriztion) Authorize(c *gin.Context) (*Claims, error) {
+func (mua *MockUserAuthoriztion) Authorize(c *gin.Context) (*domain.Claims, error) {
 	args := mua.Called(c)
 
-	return args.Get(0).(*Claims), args.Error(1)
+	return args.Get(0).(*domain.Claims), args.Error(1)
 }
 
 type MockAppCrypto struct {

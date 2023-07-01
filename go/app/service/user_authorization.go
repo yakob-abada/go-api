@@ -7,24 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/yakob-abada/go-api/go/app/domain"
 )
-
-type Claims struct {
-	Username string `json:"username"`
-	UserId   int8   `json:"user_id"`
-	jwt.RegisteredClaims
-}
-
-type TokenResponse struct {
-	Name    string    `json:"name"`
-	Value   string    `json:"value"`
-	Expires time.Time `json:"expires"`
-}
-
-type IUserAuthoriztion interface {
-	GenerateToken(username string, userId int8) (*TokenResponse, error)
-	Authorize(c *gin.Context) (*Claims, error)
-}
 
 type UserAuthoriztion struct {
 	jwtKey            []byte
@@ -38,11 +22,11 @@ func NewUserAuthorization(jwtKey []byte, jwtExpirationTime int8) *UserAuthorizti
 	}
 }
 
-func (ua *UserAuthoriztion) GenerateToken(username string, userId int8) (*TokenResponse, error) {
+func (ua *UserAuthoriztion) GenerateToken(username string, userId int8) (*domain.TokenResponse, error) {
 	// @todo move constant to config value
 	expirationTime := time.Now().Add(time.Duration(ua.jwtExpirationTime) * time.Minute)
 
-	claims := &Claims{
+	claims := &domain.Claims{
 		Username: username,
 		UserId:   userId,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -58,14 +42,14 @@ func (ua *UserAuthoriztion) GenerateToken(username string, userId int8) (*TokenR
 		return nil, fmt.Errorf("failed to generate JWT token")
 	}
 
-	return &TokenResponse{
+	return &domain.TokenResponse{
 		Name:    "token",
 		Value:   tokenString,
 		Expires: expirationTime,
 	}, nil
 }
 
-func (ua *UserAuthoriztion) Authorize(c *gin.Context) (*Claims, error) {
+func (ua *UserAuthoriztion) Authorize(c *gin.Context) (*domain.Claims, error) {
 	bearerToken := c.GetHeader("Authorization")
 
 	if bearerToken == "" {
@@ -78,7 +62,7 @@ func (ua *UserAuthoriztion) Authorize(c *gin.Context) (*Claims, error) {
 		return nil, NewUnauthorizedError("user is not authorized")
 	}
 
-	claims := &Claims{}
+	claims := &domain.Claims{}
 
 	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return ua.jwtKey, nil

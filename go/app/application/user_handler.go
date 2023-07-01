@@ -6,20 +6,19 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/yakob-abada/go-api/go/app/domain"
-	"github.com/yakob-abada/go-api/go/app/repository"
 	"github.com/yakob-abada/go-api/go/app/service"
 )
 
 type UserHandler struct {
-	Repository           repository.IUserRepository
+	Repository           domain.UserRepository
 	ErrorResponseHandler service.ErrorResponse
-	UserAuthorization    service.IUserAuthoriztion
+	UserAuthorization    domain.UserAuthoriztion
 	Validate             domain.Validate
 	Encryption           domain.AppCrypto
 }
 
 func (ah *UserHandler) Login(c *gin.Context) {
-	var authUser service.AuthUser
+	var authUser domain.AuthUser
 
 	if err := c.ShouldBindJSON(&authUser); err != nil {
 		c.JSON(ah.ErrorResponseHandler.GenerateResponse(service.NewBadRequestError("JSON body request problem")))

@@ -3,8 +3,8 @@ package application
 import (
 	"strings"
 
+	"github.com/yakob-abada/go-api/go/app/domain"
 	"github.com/yakob-abada/go-api/go/app/entity"
-	"github.com/yakob-abada/go-api/go/app/repository"
 	"github.com/yakob-abada/go-api/go/app/service"
 )
 
@@ -13,7 +13,7 @@ type ISessionUserJoinMediator interface {
 }
 
 func NewSessionUserJoinMediator(
-	sessionRepository repository.ISessionRepository,
+	sessionRepository domain.SessionRepository,
 	activeSessionSpecification *ActiveSessionSpecification,
 ) *SessionUserJoinMediator {
 	return &SessionUserJoinMediator{
@@ -23,7 +23,7 @@ func NewSessionUserJoinMediator(
 }
 
 type SessionUserJoinMediator struct {
-	sessionRepository          repository.ISessionRepository
+	sessionRepository          domain.SessionRepository
 	activeSessionSpecification *ActiveSessionSpecification
 }
 

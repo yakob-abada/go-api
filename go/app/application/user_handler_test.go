@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/yakob-abada/go-api/go/app/domain"
 	"github.com/yakob-abada/go-api/go/app/entity"
 	"github.com/yakob-abada/go-api/go/app/model"
 	"github.com/yakob-abada/go-api/go/app/repository"
@@ -28,12 +29,12 @@ func TestLogin(t *testing.T) {
 			Username: "username",
 			Password: "hashedPassword",
 		}
-		userAuth := service.AuthUser{
+		userAuth := domain.AuthUser{
 			Username: "username",
 			Password: "password",
 		}
 
-		tokenResponse := service.TokenResponse{
+		tokenResponse := domain.TokenResponse{
 			Name:  "name",
 			Value: "test",
 		}
@@ -98,7 +99,7 @@ func TestLogin(t *testing.T) {
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
 
-		userAuth := service.AuthUser{
+		userAuth := domain.AuthUser{
 			Password: "password",
 		}
 
@@ -130,7 +131,7 @@ func TestLogin(t *testing.T) {
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
 
-		userAuth := service.AuthUser{
+		userAuth := domain.AuthUser{
 			Username: "usernames",
 			Password: "password",
 		}
@@ -165,7 +166,7 @@ func TestLogin(t *testing.T) {
 			Username: "username",
 			Password: "hashedPassword",
 		}
-		userAuth := service.AuthUser{
+		userAuth := domain.AuthUser{
 			Username: "username",
 			Password: "password",
 		}
@@ -206,7 +207,7 @@ func TestLogin(t *testing.T) {
 			Username: "username",
 			Password: "hashedPassword",
 		}
-		userAuth := service.AuthUser{
+		userAuth := domain.AuthUser{
 			Username: "username",
 			Password: "password",
 		}
