@@ -35,6 +35,12 @@ The API should now be running on `http://localhost:8080`.
 
 [Explain how to use the API, including any necessary authentication or request formats.]
 
+## Run tests
+
+```shell
+make tests
+```
+
 ## Configuration
 
 [If there are any configuration options available, explain how to configure the API. This could include environment variables, configuration files, or command-line options.]
