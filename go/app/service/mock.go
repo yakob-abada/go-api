@@ -35,3 +35,19 @@ func (mua *MockUserAuthoriztion) Authorize(c *gin.Context) (*Claims, error) {
 
 	return args.Get(0).(*Claims), args.Error(1)
 }
+
+type MockAppCrypto struct {
+	mock.Mock
+}
+
+func (mac *MockAppCrypto) GenerateFromPassword(password []byte) ([]byte, error) {
+	args := mac.Called(password)
+
+	return args.Get(0).([]byte), args.Error(1)
+}
+
+func (mac *MockAppCrypto) CompareHashAndPassword(hashedPassword, password []byte) error {
+	args := mac.Called(hashedPassword, password)
+
+	return args.Error(0)
+}

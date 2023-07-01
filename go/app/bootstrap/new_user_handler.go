@@ -26,6 +26,7 @@ func NewUserHandler() *application.UserHandler {
 		UserAuthorization: service.NewUserAuthorization(
 			[]byte(os.Getenv("JWT_SECRET_KEY")), int8(jwtExpirationTime),
 		),
-		Validate: validator.New(),
+		Validate:   validator.New(),
+		Encryption: service.NewAppCrypto(),
 	}
 }

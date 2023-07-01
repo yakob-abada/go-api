@@ -21,10 +21,12 @@ func TestLogin(t *testing.T) {
 		var mockErrorResponse = &service.MockErrorResponse{}
 		var mockValidate = &MockValidate{}
 		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockAppCrypto = &service.MockAppCrypto{}
 
 		user := entity.User{
 			Id:       1,
 			Username: "username",
+			Password: "hashedPassword",
 		}
 		userAuth := service.AuthUser{
 			Username: "username",
@@ -38,7 +40,8 @@ func TestLogin(t *testing.T) {
 
 		mockValidate.On("Struct", userAuth).Return(nil)
 		mockUserAuthorization.On("GenerateToken", user.Username, user.Id).Return(&tokenResponse, nil)
-		mockUserRepository.On("FindByUsernameAndPass", "username", "password").Return(&user, nil)
+		mockUserRepository.On("FindByUsername", "username").Return(&user, nil)
+		mockAppCrypto.On("CompareHashAndPassword", []byte("hashedPassword"), []byte("password")).Return(nil)
 		gin.SetMode(gin.TestMode)
 
 		w := httptest.NewRecorder()
@@ -52,6 +55,7 @@ func TestLogin(t *testing.T) {
 			ErrorResponseHandler: mockErrorResponse,
 			UserAuthorization:    mockUserAuthorization,
 			Validate:             mockValidate,
+			Encryption:           mockAppCrypto,
 		}
 
 		sut.Login(c)
@@ -62,6 +66,7 @@ func TestLogin(t *testing.T) {
 		var mockErrorResponse = &service.MockErrorResponse{}
 		var mockValidate = &MockValidate{}
 		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockAppCrypto = &service.MockAppCrypto{}
 
 		gin.SetMode(gin.TestMode)
 		w := httptest.NewRecorder()
@@ -76,6 +81,7 @@ func TestLogin(t *testing.T) {
 			ErrorResponseHandler: mockErrorResponse,
 			UserAuthorization:    mockUserAuthorization,
 			Validate:             mockValidate,
+			Encryption:           mockAppCrypto,
 		}
 
 		sut.Login(c)
@@ -86,6 +92,7 @@ func TestLogin(t *testing.T) {
 		var mockErrorResponse = &service.MockErrorResponse{}
 		var mockValidate = &MockValidate{}
 		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockAppCrypto = &service.MockAppCrypto{}
 
 		gin.SetMode(gin.TestMode)
 		w := httptest.NewRecorder()
@@ -106,6 +113,7 @@ func TestLogin(t *testing.T) {
 			ErrorResponseHandler: mockErrorResponse,
 			UserAuthorization:    mockUserAuthorization,
 			Validate:             mockValidate,
+			Encryption:           mockAppCrypto,
 		}
 
 		sut.Login(c)
@@ -116,6 +124,7 @@ func TestLogin(t *testing.T) {
 		var mockErrorResponse = &service.MockErrorResponse{}
 		var mockValidate = &MockValidate{}
 		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockAppCrypto = &service.MockAppCrypto{}
 
 		gin.SetMode(gin.TestMode)
 		w := httptest.NewRecorder()
@@ -127,7 +136,7 @@ func TestLogin(t *testing.T) {
 		}
 
 		mockValidate.On("Struct", userAuth).Return(nil)
-		mockUserRepository.On("FindByUsernameAndPass", "usernames", "password").Return(nil, fmt.Errorf("username doesn't exist"))
+		mockUserRepository.On("FindByUsername", "usernames").Return(nil, fmt.Errorf("username doesn't exist"))
 		mockErrorResponse.On("GenerateResponse", fmt.Errorf("username doesn't exist")).Return(500, &model.ErrorResponse{Error: "username doesn't exist"}).Once()
 
 		jsonbytes, _ := json.Marshal(userAuth)
@@ -138,6 +147,7 @@ func TestLogin(t *testing.T) {
 			ErrorResponseHandler: mockErrorResponse,
 			UserAuthorization:    mockUserAuthorization,
 			Validate:             mockValidate,
+			Encryption:           mockAppCrypto,
 		}
 
 		sut.Login(c)
@@ -148,10 +158,12 @@ func TestLogin(t *testing.T) {
 		var mockErrorResponse = &service.MockErrorResponse{}
 		var mockValidate = &MockValidate{}
 		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockAppCrypto = &service.MockAppCrypto{}
 
 		user := entity.User{
 			Id:       1,
 			Username: "username",
+			Password: "hashedPassword",
 		}
 		userAuth := service.AuthUser{
 			Username: "username",
@@ -161,7 +173,8 @@ func TestLogin(t *testing.T) {
 		mockValidate.On("Struct", userAuth).Return(nil)
 		mockUserAuthorization.On("GenerateToken", user.Username, user.Id).Return(nil, fmt.Errorf("failed to generate JWT token"))
 		mockErrorResponse.On("GenerateResponse", fmt.Errorf("failed to generate JWT token")).Return(500, &model.ErrorResponse{Error: "failed to generate JWT token"}).Once()
-		mockUserRepository.On("FindByUsernameAndPass", "username", "password").Return(&user, nil)
+		mockUserRepository.On("FindByUsername", "username").Return(&user, nil)
+		mockAppCrypto.On("CompareHashAndPassword", []byte("hashedPassword"), []byte("password")).Return(nil)
 		gin.SetMode(gin.TestMode)
 
 		w := httptest.NewRecorder()
@@ -175,6 +188,7 @@ func TestLogin(t *testing.T) {
 			ErrorResponseHandler: mockErrorResponse,
 			UserAuthorization:    mockUserAuthorization,
 			Validate:             mockValidate,
+			Encryption:           mockAppCrypto,
 		}
 
 		sut.Login(c)

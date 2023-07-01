@@ -15,6 +15,7 @@ type UserHandler struct {
 	ErrorResponseHandler service.ErrorResponse
 	UserAuthorization    service.IUserAuthoriztion
 	Validate             domain.Validate
+	Encryption           domain.AppCrypto
 }
 
 func (ah *UserHandler) Login(c *gin.Context) {
@@ -32,10 +33,15 @@ func (ah *UserHandler) Login(c *gin.Context) {
 	}
 
 	// @todo username and password doesn't exist should be handled
-	user, err := ah.Repository.FindByUsernameAndPass(authUser.Username, authUser.Password)
+	user, err := ah.Repository.FindByUsername(authUser.Username)
 
 	if err != nil {
 		c.JSON(ah.ErrorResponseHandler.GenerateResponse(err))
+		return
+	}
+
+	if err = ah.Encryption.CompareHashAndPassword([]byte(user.Password), []byte(authUser.Password)); err != nil {
+		c.JSON(ah.ErrorResponseHandler.GenerateResponse(service.NewUnauthorizedError("Invalid credentials")))
 		return
 	}
 

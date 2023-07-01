@@ -48,8 +48,8 @@ type MockUserRepository struct {
 	mock.Mock
 }
 
-func (mur *MockUserRepository) FindByUsernameAndPass(username string, password string) (*entity.User, error) {
-	args := mur.Called(username, password)
+func (mur *MockUserRepository) FindByUsername(username string) (*entity.User, error) {
+	args := mur.Called(username)
 
 	if args.Error(1) != nil {
 		return nil, args.Error(1)

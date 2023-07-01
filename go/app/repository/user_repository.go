@@ -7,7 +7,7 @@ import (
 )
 
 type IUserRepository interface {
-	FindByUsernameAndPass(username string, password string) (*entity.User, error)
+	FindByUsername(username string) (*entity.User, error)
 }
 
 type UserRepository struct {
@@ -20,7 +20,7 @@ func NewUserRepository(dbConnection DatabaseConnection) *UserRepository {
 	}
 }
 
-func (sr *UserRepository) FindByUsernameAndPass(username string, password string) (*entity.User, error) {
+func (sr *UserRepository) FindByUsername(username string) (*entity.User, error) {
 	var user entity.User
 
 	db, err := sr.dBConnection.Connect()
@@ -30,11 +30,11 @@ func (sr *UserRepository) FindByUsernameAndPass(username string, password string
 	}
 
 	row := db.QueryRow(`
-		SELECT id, first_name, last_name, username, is_active FROM application.user
-		WHERE username = ? AND password = ?
-	`, username, password)
+		SELECT id, first_name, last_name, username, password, is_active FROM application.user
+		WHERE username = ?
+	`, username)
 
-	if err := row.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Username, &user.IsActive); err != nil {
+	if err := row.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Username, &user.Password, &user.IsActive); err != nil {
 		return nil, fmt.Errorf("user with username %s: %v", username, err)
 	}
 
