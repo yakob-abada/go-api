@@ -23,6 +23,10 @@ type MockUserAuthoriztion struct {
 func (mua *MockUserAuthoriztion) GenerateToken(username string, userId int8) (*TokenResponse, error) {
 	args := mua.Called(username, userId)
 
+	if args.Error(1) != nil {
+		return nil, args.Error(1)
+	}
+
 	return args.Get(0).(*TokenResponse), args.Error(1)
 }
 

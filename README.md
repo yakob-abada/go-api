@@ -38,3 +38,7 @@ The API should now be running on `http://localhost:8080`.
 ## Configuration
 
 [If there are any configuration options available, explain how to configure the API. This could include environment variables, configuration files, or command-line options.]
+
+## Things to improve.
+- Adding error logs for production purposes.
+- Improve mysql message to make it more user friendly.

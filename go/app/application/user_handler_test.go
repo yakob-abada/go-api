@@ -55,7 +55,6 @@ func TestLogin(t *testing.T) {
 		}
 
 		sut.Login(c)
-
 	})
 
 	t.Run("failed no body request", func(t *testing.T) {
@@ -80,7 +79,6 @@ func TestLogin(t *testing.T) {
 		}
 
 		sut.Login(c)
-
 	})
 
 	t.Run("failed missing username", func(t *testing.T) {
@@ -111,6 +109,74 @@ func TestLogin(t *testing.T) {
 		}
 
 		sut.Login(c)
+	})
 
+	t.Run("failed username is wrong", func(t *testing.T) {
+		var mockUserRepository = &repository.MockUserRepository{}
+		var mockErrorResponse = &service.MockErrorResponse{}
+		var mockValidate = &MockValidate{}
+		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+
+		gin.SetMode(gin.TestMode)
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
+
+		userAuth := service.AuthUser{
+			Username: "usernames",
+			Password: "password",
+		}
+
+		mockValidate.On("Struct", userAuth).Return(nil)
+		mockUserRepository.On("FindByUsernameAndPass", "usernames", "password").Return(nil, fmt.Errorf("username doesn't exist"))
+		mockErrorResponse.On("GenerateResponse", fmt.Errorf("username doesn't exist")).Return(500, &model.ErrorResponse{Error: "username doesn't exist"}).Once()
+
+		jsonbytes, _ := json.Marshal(userAuth)
+		c.Request, _ = http.NewRequest(http.MethodPost, "/", bytes.NewBuffer(jsonbytes))
+
+		sut := UserHandler{
+			Repository:           mockUserRepository,
+			ErrorResponseHandler: mockErrorResponse,
+			UserAuthorization:    mockUserAuthorization,
+			Validate:             mockValidate,
+		}
+
+		sut.Login(c)
+	})
+
+	t.Run("failed create token", func(t *testing.T) {
+		var mockUserRepository = &repository.MockUserRepository{}
+		var mockErrorResponse = &service.MockErrorResponse{}
+		var mockValidate = &MockValidate{}
+		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+
+		user := entity.User{
+			Id:       1,
+			Username: "username",
+		}
+		userAuth := service.AuthUser{
+			Username: "username",
+			Password: "password",
+		}
+
+		mockValidate.On("Struct", userAuth).Return(nil)
+		mockUserAuthorization.On("GenerateToken", user.Username, user.Id).Return(nil, fmt.Errorf("failed to generate JWT token"))
+		mockErrorResponse.On("GenerateResponse", fmt.Errorf("failed to generate JWT token")).Return(500, &model.ErrorResponse{Error: "failed to generate JWT token"}).Once()
+		mockUserRepository.On("FindByUsernameAndPass", "username", "password").Return(&user, nil)
+		gin.SetMode(gin.TestMode)
+
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
+		jsonbytes, _ := json.Marshal(userAuth)
+
+		c.Request, _ = http.NewRequest(http.MethodPost, "/", bytes.NewBuffer(jsonbytes))
+
+		sut := UserHandler{
+			Repository:           mockUserRepository,
+			ErrorResponseHandler: mockErrorResponse,
+			UserAuthorization:    mockUserAuthorization,
+			Validate:             mockValidate,
+		}
+
+		sut.Login(c)
 	})
 }
