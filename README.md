@@ -53,7 +53,7 @@ make tests
 ```
 
 ### Database schema
-![schema](db_schema.png)
+![schema](https://github.com/yakob-abada/go-api/blob/main/db_shema.png)
 
 ## Things to improve.
 - Adding error logs for production purposes.
