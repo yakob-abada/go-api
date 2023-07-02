@@ -83,7 +83,7 @@ CREATE TABLE `session_user` (
   `user_id` int(11) NOT NULL,
   UNIQUE KEY `unique_index` (`session_id`,`user_id`),
   KEY `FK_session_user` (`user_id`),
-  CONSTRAINT `FK_session_class` FOREIGN KEY (`session_id`) REFERENCES `class` (`id`),
+  CONSTRAINT `FK_session_class` FOREIGN KEY (`session_id`) REFERENCES `session` (`id`),
   CONSTRAINT `FK_session_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
