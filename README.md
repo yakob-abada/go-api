@@ -48,3 +48,4 @@ make tests
 ## Things to improve.
 - Adding error logs for production purposes.
 - Improve mysql message to make it more user friendly.
+- Handle query injection.

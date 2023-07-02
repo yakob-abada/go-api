@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"database/sql"
+
 	"github.com/yakob-abada/go-api/go/app/entity"
 
 	"github.com/stretchr/testify/mock"
@@ -50,4 +52,18 @@ func (mur *MockUserRepository) FindByUsername(username string) (*entity.User, er
 	}
 
 	return args.Get(0).(*entity.User), args.Error(1)
+}
+
+type MockMysqlConnection struct {
+	mock.Mock
+}
+
+func (mmc *MockMysqlConnection) Connect() (*sql.DB, error) {
+	args := mmc.Called()
+
+	if args.Error(1) != nil {
+		return nil, args.Error(1)
+	}
+
+	return args.Get(0).(*sql.DB), args.Error(1)
 }
