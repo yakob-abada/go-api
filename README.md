@@ -7,6 +7,9 @@ It also followed SOLID principle.
 
 It has coverted with unit tests [testify](https://github.com/stretchr/testify) and [sqlmock](https://pkg.go.dev/github.com/data-dog/go-sqlmock).
 [JWT](https://github.com/golang-jwt/jwt) has been implemented.
+Github actions pipeline has been set up to run tests.
+Using docker.
+Add to pipeline auto deployment to AWS EC2 fargate.
 
 ## Installation
 
