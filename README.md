@@ -5,8 +5,8 @@ This application is a project to learn about [GIN](https://gin-gonic.com/) frame
 - Dependency Injection (DI).
 It also followed SOLID principle.
 
-It has coverted with unit tests [testify](https://github.com/stretchr/testify) and [sqlmock](https://pkg.go.dev/github.com/data-dog/go-sqlmock)
-[JWT](https://github.com/golang-jwt/jwt) has been implemented
+It has coverted with unit tests [testify](https://github.com/stretchr/testify) and [sqlmock](https://pkg.go.dev/github.com/data-dog/go-sqlmock).
+[JWT](https://github.com/golang-jwt/jwt) has been implemented.
 
 ## Installation
 
@@ -33,7 +33,7 @@ docker compose up
 The API should now be running on `http://localhost:8080`.
 
 ## Gym application
-- It exposes come Restful APIs that ables loggedin gym members to list all active sessions for given week and join them if it's not full.
+- It exposes come Restful APIs that ables loggedin gym members to list all active sessions for given week and join. them if it's not full.
     - GET `http://localhost:8080/active-session` -> to get active session for given week.
     - POST `http://localhost:8080/login` -> to login and retrieve JWT token.
         - body 
@@ -61,4 +61,4 @@ make tests
 - Handle query injection.
 - Add a cron job that creates session at the beginning of every week.
 - User signup.
-- Refresh token
+- Refresh token.
