@@ -45,15 +45,15 @@ The API should now be running on `http://localhost:8080`.
         ```
     - POST `http://localhost:8080/session/{session_id}/join`
         - header ```Authorization: Breaer {JWT token} ```
-## Usage
-
-[Explain how to use the API, including any necessary authentication or request formats.]
 
 ## Run tests
 
 ```shell
 make tests
 ```
+
+### Database schema
+![schema](db_schema.png)
 
 ## Things to improve.
 - Adding error logs for production purposes.
