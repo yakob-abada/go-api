@@ -7,5 +7,4 @@ type ISessionRepository interface {
 	FindAll() ([]entity.Session, error)
 	FindActive() ([]entity.Session, error)
 	Join(sessionId int8, userId int8) error
-	SetSessionIsFullSatistfaction(sessionId int8) error
 }

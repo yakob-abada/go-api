@@ -38,12 +38,6 @@ func (msr *MockSessionRepository) Join(sessionId int8, userId int8) error {
 	return args.Error(1)
 }
 
-func (msr *MockSessionRepository) SetSessionIsFullSatistfaction(sessionId int8) error {
-	args := msr.Called(sessionId)
-
-	return args.Error(1)
-}
-
 type MockUserRepository struct {
 	mock.Mock
 }

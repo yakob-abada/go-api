@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/yakob-abada/go-api/go/app/entity"
@@ -8,11 +9,13 @@ import (
 
 type SessionRepository struct {
 	dBConnection DatabaseConnection
+	ctx          context.Context
 }
 
-func NewSessionRepository(dbConnection DatabaseConnection) *SessionRepository {
+func NewSessionRepository(dbConnection DatabaseConnection, ctx context.Context) *SessionRepository {
 	return &SessionRepository{
 		dBConnection: dbConnection,
+		ctx:          ctx,
 	}
 }
 
@@ -62,7 +65,7 @@ func (sr *SessionRepository) FindAll() ([]entity.Session, error) {
 
 	for rows.Next() {
 		var session entity.Session
-		if err := rows.Scan(&session.Id); err != nil {
+		if err := rows.Scan(&session.Id, &session.Name, &session.Time, &session.Duration, &session.IsFull); err != nil {
 			return nil, fmt.Errorf("session: %v", err)
 		}
 
@@ -107,25 +110,25 @@ func (sr *SessionRepository) FindActive() ([]entity.Session, error) {
 }
 
 func (sr *SessionRepository) Join(sessionId int8, userId int8) error {
+
 	db, err := sr.dBConnection.Connect()
 
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Query("INSERT INTO session_user (session_id, user_id) values (?, ?)", sessionId, userId)
-
-	return err
-}
-
-func (sr *SessionRepository) SetSessionIsFullSatistfaction(sessionId int8) error {
-	db, err := sr.dBConnection.Connect()
-
+	tx, err := db.BeginTx(sr.ctx, nil)
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Query(`
+	_, err = tx.ExecContext(sr.ctx, "INSERT INTO session_user (session_id, user_id) values (?, ?)", sessionId, userId)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	_, err = tx.ExecContext(sr.ctx, `
 		UPDATE session SET is_full = 1 WHERE id =
 		(
 			select id from (
@@ -134,10 +137,16 @@ func (sr *SessionRepository) SetSessionIsFullSatistfaction(sessionId int8) error
 				INNER JOIN class ON class.id = session.class_id
 				LEFT JOIN session_user ON session.id = session_id
 				WHERE session.id = ?
+				GROUP BY session.id
 				HAVING count >= max_participant
 			) x
 		);
 	`, sessionId)
 
-	return err
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit()
 }

@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -17,10 +18,10 @@ func NewSessionHandler() *application.SessionHandler {
 		os.Getenv("DATABASE_NAME"),
 	)
 
-	sessionRepository := repository.NewSessionRepository(mysqlConnection)
+	sessionRepository := repository.NewSessionRepository(mysqlConnection, context.Background())
 
 	return &application.SessionHandler{
-		SessionRepository:    repository.NewSessionRepository(mysqlConnection),
+		SessionRepository:    sessionRepository,
 		UserRepository:       repository.NewUserRepository(mysqlConnection),
 		ErrorResponseHandler: service.NewErrorResponseHandler(),
 		UserAuthorization: service.NewUserAuthorization(

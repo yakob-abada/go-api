@@ -43,7 +43,5 @@ func (suj *SessionUserJoinMediator) Mediate(session *entity.Session, userId int8
 		return err
 	}
 
-	err = suj.sessionRepository.SetSessionIsFullSatistfaction(session.Id)
-
 	return err
 }
