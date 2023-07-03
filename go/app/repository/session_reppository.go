@@ -122,9 +122,10 @@ func (sr *SessionRepository) Join(sessionId int8, userId int8) error {
 		return err
 	}
 
+	defer tx.Rollback()
+
 	_, err = tx.ExecContext(sr.ctx, "INSERT INTO session_user (session_id, user_id) values (?, ?)", sessionId, userId)
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
 
@@ -144,7 +145,6 @@ func (sr *SessionRepository) Join(sessionId int8, userId int8) error {
 	`, sessionId)
 
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
 
