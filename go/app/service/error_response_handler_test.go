@@ -5,12 +5,12 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/yakob-abada/go-api/go/app/model"
+	"github.com/yakob-abada/go-api/go/app/domain"
 )
 
 func TestXxx(t *testing.T) {
 	t.Run("InternalServerError", func(t *testing.T) {
-		response := &model.ErrorResponse{
+		response := &domain.ErrorResponse{
 			Error: "something wwent wrong",
 		}
 
@@ -23,7 +23,7 @@ func TestXxx(t *testing.T) {
 	})
 
 	t.Run("UnauthorizedError", func(t *testing.T) {
-		response := &model.ErrorResponse{
+		response := &domain.ErrorResponse{
 			Error: "unauthorized error",
 		}
 
@@ -36,7 +36,7 @@ func TestXxx(t *testing.T) {
 	})
 
 	t.Run("UnauthorizedError", func(t *testing.T) {
-		response := &model.ErrorResponse{
+		response := &domain.ErrorResponse{
 			Error: "unauthorized error",
 		}
 
@@ -49,7 +49,7 @@ func TestXxx(t *testing.T) {
 	})
 
 	t.Run("BadRequestError", func(t *testing.T) {
-		response := &model.ErrorResponse{
+		response := &domain.ErrorResponse{
 			Error: "badRequest error",
 		}
 
@@ -62,7 +62,7 @@ func TestXxx(t *testing.T) {
 	})
 
 	t.Run("UnprocessableEntityError", func(t *testing.T) {
-		response := &model.ErrorResponse{
+		response := &domain.ErrorResponse{
 			Error: "unprocessable error",
 		}
 

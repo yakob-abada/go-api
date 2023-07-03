@@ -3,17 +3,16 @@ package service
 import (
 	"github.com/stretchr/testify/mock"
 	"github.com/yakob-abada/go-api/go/app/domain"
-	"github.com/yakob-abada/go-api/go/app/model"
 )
 
 type MockErrorResponse struct {
 	mock.Mock
 }
 
-func (mer *MockErrorResponse) GenerateResponse(err error) (int, *model.ErrorResponse) {
+func (mer *MockErrorResponse) GenerateResponse(err error) (int, *domain.ErrorResponse) {
 	args := mer.Called(err)
 
-	return args.Get(0).(int), args.Get(1).(*model.ErrorResponse)
+	return args.Get(0).(int), args.Get(1).(*domain.ErrorResponse)
 }
 
 type MockUserAuthoriztion struct {

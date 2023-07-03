@@ -11,7 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/yakob-abada/go-api/go/app/domain"
 	"github.com/yakob-abada/go-api/go/app/entity"
-	"github.com/yakob-abada/go-api/go/app/model"
 	"github.com/yakob-abada/go-api/go/app/repository"
 	"github.com/yakob-abada/go-api/go/app/service"
 )
@@ -73,7 +72,7 @@ func TestLogin(t *testing.T) {
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
 
-		mockErrorResponse.On("GenerateResponse", service.NewBadRequestError("JSON body request problem")).Return(400, &model.ErrorResponse{Error: "JSON body request problem"}).Once()
+		mockErrorResponse.On("GenerateResponse", service.NewBadRequestError("JSON body request problem")).Return(400, &domain.ErrorResponse{Error: "JSON body request problem"}).Once()
 
 		c.Request, _ = http.NewRequest(http.MethodPost, "/", nil)
 
@@ -104,7 +103,7 @@ func TestLogin(t *testing.T) {
 		}
 
 		mockValidate.On("Struct", userAuth).Return(fmt.Errorf("Username is missing"))
-		mockErrorResponse.On("GenerateResponse", service.NewBadRequestError("Username is missing")).Return(400, &model.ErrorResponse{Error: "Username is missing"}).Once()
+		mockErrorResponse.On("GenerateResponse", service.NewBadRequestError("Username is missing")).Return(400, &domain.ErrorResponse{Error: "Username is missing"}).Once()
 
 		jsonbytes, _ := json.Marshal(userAuth)
 		c.Request, _ = http.NewRequest(http.MethodPost, "/", bytes.NewBuffer(jsonbytes))
@@ -138,7 +137,7 @@ func TestLogin(t *testing.T) {
 
 		mockValidate.On("Struct", userAuth).Return(nil)
 		mockUserRepository.On("FindByUsername", "usernames").Return(nil, fmt.Errorf("username doesn't exist"))
-		mockErrorResponse.On("GenerateResponse", fmt.Errorf("username doesn't exist")).Return(500, &model.ErrorResponse{Error: "username doesn't exist"}).Once()
+		mockErrorResponse.On("GenerateResponse", fmt.Errorf("username doesn't exist")).Return(500, &domain.ErrorResponse{Error: "username doesn't exist"}).Once()
 
 		jsonbytes, _ := json.Marshal(userAuth)
 		c.Request, _ = http.NewRequest(http.MethodPost, "/", bytes.NewBuffer(jsonbytes))
@@ -175,7 +174,7 @@ func TestLogin(t *testing.T) {
 		mockUserAuthorization.On("GenerateToken", user.Username, user.Id).Return(nil, fmt.Errorf("failed to generate JWT token"))
 		mockUserRepository.On("FindByUsername", "username").Return(&user, nil)
 		mockAppCrypto.On("CompareHashAndPassword", []byte("hashedPassword"), []byte("password")).Return(fmt.Errorf("invalid auth"))
-		mockErrorResponse.On("GenerateResponse", service.NewUnauthorizedError("Invalid credentials")).Return(401, &model.ErrorResponse{Error: "Invalid credentials"}).Once()
+		mockErrorResponse.On("GenerateResponse", service.NewUnauthorizedError("Invalid credentials")).Return(401, &domain.ErrorResponse{Error: "Invalid credentials"}).Once()
 		gin.SetMode(gin.TestMode)
 
 		w := httptest.NewRecorder()
@@ -214,7 +213,7 @@ func TestLogin(t *testing.T) {
 
 		mockValidate.On("Struct", userAuth).Return(nil)
 		mockUserAuthorization.On("GenerateToken", user.Username, user.Id).Return(nil, fmt.Errorf("failed to generate JWT token"))
-		mockErrorResponse.On("GenerateResponse", fmt.Errorf("failed to generate JWT token")).Return(500, &model.ErrorResponse{Error: "failed to generate JWT token"}).Once()
+		mockErrorResponse.On("GenerateResponse", fmt.Errorf("failed to generate JWT token")).Return(500, &domain.ErrorResponse{Error: "failed to generate JWT token"}).Once()
 		mockUserRepository.On("FindByUsername", "username").Return(&user, nil)
 		mockAppCrypto.On("CompareHashAndPassword", []byte("hashedPassword"), []byte("password")).Return(nil)
 		gin.SetMode(gin.TestMode)

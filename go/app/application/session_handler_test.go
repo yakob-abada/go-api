@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/yakob-abada/go-api/go/app/domain"
 	"github.com/yakob-abada/go-api/go/app/entity"
-	"github.com/yakob-abada/go-api/go/app/model"
 	"github.com/yakob-abada/go-api/go/app/repository"
 	"github.com/yakob-abada/go-api/go/app/service"
 )
@@ -56,7 +55,7 @@ func TestSessionHandlerGetList(t *testing.T) {
 
 		var sessions []entity.Session
 		mockSessionRepository.On("FindAll").Return(sessions, fmt.Errorf("something went wrong"))
-		mockErrorResponse.On("GenerateResponse", fmt.Errorf("something went wrong")).Return(500, &model.ErrorResponse{Error: "something went wrong"}).Once()
+		mockErrorResponse.On("GenerateResponse", fmt.Errorf("something went wrong")).Return(500, &domain.ErrorResponse{Error: "something went wrong"}).Once()
 
 		gin.SetMode(gin.TestMode)
 		w := httptest.NewRecorder()
@@ -129,7 +128,7 @@ func TestSessionHandlerJoin(t *testing.T) {
 		}
 
 		mockSessionRepository.On("FindById", "1").Return(nil, fmt.Errorf("something went wrong"))
-		mockErrorResponse.On("GenerateResponse", fmt.Errorf("something went wrong")).Return(500, &model.ErrorResponse{Error: "something went wrong"}).Once()
+		mockErrorResponse.On("GenerateResponse", fmt.Errorf("something went wrong")).Return(500, &domain.ErrorResponse{Error: "something went wrong"}).Once()
 		gin.SetMode(gin.TestMode)
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
@@ -176,7 +175,7 @@ func TestSessionHandlerJoin(t *testing.T) {
 
 		err := service.NewUnprocessableEntityError("session is not available to join")
 		mockSessionUserJoinMediator.On("Mediate", &session, claims.UserId).Return(err)
-		mockErrorResponse.On("GenerateResponse", err).Return(500, &model.ErrorResponse{Error: "session is not available to join"}).Once()
+		mockErrorResponse.On("GenerateResponse", err).Return(500, &domain.ErrorResponse{Error: "session is not available to join"}).Once()
 
 		sut := &SessionHandler{
 			SessionRepository:       mockSessionRepository,

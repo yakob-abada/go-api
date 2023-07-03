@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/yakob-abada/go-api/go/app/model"
+	"github.com/yakob-abada/go-api/go/app/domain"
 )
 
 func NewErrorResponseHandler() *ErrorResponseHandler {
@@ -14,7 +14,7 @@ func NewErrorResponseHandler() *ErrorResponseHandler {
 
 type ErrorResponseHandler struct{}
 
-func (erg *ErrorResponseHandler) GenerateResponse(err error) (int, *model.ErrorResponse) {
+func (erg *ErrorResponseHandler) GenerateResponse(err error) (int, *domain.ErrorResponse) {
 	errorMessage := err.Error()
 	var statusCode int = http.StatusInternalServerError
 
@@ -38,7 +38,7 @@ func (erg *ErrorResponseHandler) GenerateResponse(err error) (int, *model.ErrorR
 		statusCode = http.StatusUnprocessableEntity
 	}
 
-	return statusCode, &model.ErrorResponse{
+	return statusCode, &domain.ErrorResponse{
 		Error: errorMessage,
 	}
 }

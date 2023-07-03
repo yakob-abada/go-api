@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/yakob-abada/go-api/go/app/domain"
-	"github.com/yakob-abada/go-api/go/app/model"
 	"github.com/yakob-abada/go-api/go/app/service"
 
 	"github.com/gin-gonic/gin"
@@ -57,5 +56,5 @@ func (slh *SessionHandler) Join(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, model.SuccessResponse{Message: "user has joined successfully"})
+	c.JSON(http.StatusOK, domain.SuccessResponse{Message: "user has joined successfully"})
 }
