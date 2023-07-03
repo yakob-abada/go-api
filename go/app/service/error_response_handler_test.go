@@ -8,7 +8,7 @@ import (
 	"github.com/yakob-abada/go-api/go/app/domain"
 )
 
-func TestXxx(t *testing.T) {
+func TestErrorResponseHandler(t *testing.T) {
 	t.Run("InternalServerError", func(t *testing.T) {
 		response := &domain.ErrorResponse{
 			Error: "something wwent wrong",
