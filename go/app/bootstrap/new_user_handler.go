@@ -23,7 +23,7 @@ func NewUserHandler() *application.UserHandler {
 			),
 		),
 		ErrorResponseHandler: service.NewErrorResponseHandler(),
-		UserAuthorization: service.NewUserAuthorization(
+		AuthToken: service.NewJwtToken(
 			[]byte(os.Getenv("JWT_SECRET_KEY")), int8(jwtExpirationTime),
 		),
 		Validate:   validator.New(),

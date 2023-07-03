@@ -2,29 +2,27 @@ package service
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/yakob-abada/go-api/go/app/domain"
 )
 
-type UserAuthoriztion struct {
+type JwtToken struct {
 	jwtKey            []byte
 	jwtExpirationTime int8
 }
 
-func NewUserAuthorization(jwtKey []byte, jwtExpirationTime int8) *UserAuthoriztion {
-	return &UserAuthoriztion{
+func NewJwtToken(jwtKey []byte, jwtExpirationTime int8) *JwtToken {
+	return &JwtToken{
 		jwtKey:            jwtKey,
 		jwtExpirationTime: jwtExpirationTime,
 	}
 }
 
-func (ua *UserAuthoriztion) GenerateToken(username string, userId int8) (*domain.TokenResponse, error) {
+func (jt *JwtToken) GenerateToken(username string, userId int8) (*domain.TokenResponse, error) {
 	// @todo move constant to config value
-	expirationTime := time.Now().Add(time.Duration(ua.jwtExpirationTime) * time.Minute)
+	expirationTime := time.Now().Add(time.Duration(jt.jwtExpirationTime) * time.Minute)
 
 	claims := &domain.Claims{
 		Username: username,
@@ -36,7 +34,7 @@ func (ua *UserAuthoriztion) GenerateToken(username string, userId int8) (*domain
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	tokenString, err := token.SignedString(ua.jwtKey)
+	tokenString, err := token.SignedString(jt.jwtKey)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate JWT token")
@@ -49,23 +47,11 @@ func (ua *UserAuthoriztion) GenerateToken(username string, userId int8) (*domain
 	}, nil
 }
 
-func (ua *UserAuthoriztion) Authorize(c *gin.Context) (*domain.Claims, error) {
-	bearerToken := c.GetHeader("Authorization")
-
-	if bearerToken == "" {
-		return nil, NewUnauthorizedError("user is not authorized")
-	}
-
-	token := strings.Replace(bearerToken, "Bearer ", "", 1)
-
-	if token == "" {
-		return nil, NewUnauthorizedError("user is not authorized")
-	}
-
+func (jt *JwtToken) Validate(token string) (*domain.Claims, error) {
 	claims := &domain.Claims{}
 
 	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-		return ua.jwtKey, nil
+		return jt.jwtKey, nil
 	})
 
 	if err != nil {

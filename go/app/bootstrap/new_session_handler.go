@@ -24,9 +24,6 @@ func NewSessionHandler() *application.SessionHandler {
 		SessionRepository:    sessionRepository,
 		UserRepository:       repository.NewUserRepository(mysqlConnection),
 		ErrorResponseHandler: service.NewErrorResponseHandler(),
-		UserAuthorization: service.NewUserAuthorization(
-			[]byte(os.Getenv("JWT_SECRET_KEY")), 8,
-		),
 		SessionUserJoinMediator: application.NewSessionUserJoinMediator(
 			sessionRepository,
 			application.NewActiveSessionSpecification(),

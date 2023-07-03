@@ -19,7 +19,6 @@ func TestSessionHandlerGetList(t *testing.T) {
 		var mockSessionRepository = &repository.MockSessionRepository{}
 		var mockUserRepository = &repository.MockUserRepository{}
 		var mockErrorResponse = &service.MockErrorResponse{}
-		var mockUserAuthorization = &service.MockUserAuthoriztion{}
 		var mockSessionUserJoinMediator = &MockSessionUserJoinMediator{}
 		var time, _ = time.Parse("2006-01-02 15:04:00", "2023-06-26 07:00:00")
 
@@ -42,7 +41,6 @@ func TestSessionHandlerGetList(t *testing.T) {
 			SessionRepository:       mockSessionRepository,
 			UserRepository:          mockUserRepository,
 			ErrorResponseHandler:    mockErrorResponse,
-			UserAuthorization:       mockUserAuthorization,
 			SessionUserJoinMediator: mockSessionUserJoinMediator,
 		}
 
@@ -54,7 +52,6 @@ func TestSessionHandlerGetList(t *testing.T) {
 		var mockSessionRepository = &repository.MockSessionRepository{}
 		var mockUserRepository = &repository.MockUserRepository{}
 		var mockErrorResponse = &service.MockErrorResponse{}
-		var mockUserAuthorization = &service.MockUserAuthoriztion{}
 		var mockSessionUserJoinMediator = &MockSessionUserJoinMediator{}
 
 		var sessions []entity.Session
@@ -69,7 +66,6 @@ func TestSessionHandlerGetList(t *testing.T) {
 			SessionRepository:       mockSessionRepository,
 			UserRepository:          mockUserRepository,
 			ErrorResponseHandler:    mockErrorResponse,
-			UserAuthorization:       mockUserAuthorization,
 			SessionUserJoinMediator: mockSessionUserJoinMediator,
 		}
 
@@ -85,7 +81,6 @@ func TestSessionHandlerJoin(t *testing.T) {
 		var mockSessionRepository = &repository.MockSessionRepository{}
 		var mockUserRepository = &repository.MockUserRepository{}
 		var mockErrorResponse = &service.MockErrorResponse{}
-		var mockUserAuthorization = &service.MockUserAuthoriztion{}
 		var mockSessionUserJoinMediator = &MockSessionUserJoinMediator{}
 		var time, _ = time.Parse("2006-01-02 15:04:00", "2023-06-26 07:00:00")
 
@@ -106,16 +101,15 @@ func TestSessionHandlerJoin(t *testing.T) {
 		gin.SetMode(gin.TestMode)
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
+		c.Keys = map[string]any{"cliams": claims}
 		c.Params = []gin.Param{{Key: "id", Value: "1"}}
 
-		mockUserAuthorization.On("Authorize", c).Return(&claims, nil)
 		mockSessionUserJoinMediator.On("Mediate", &session, claims.UserId).Return(nil)
 
 		sut := &SessionHandler{
 			SessionRepository:       mockSessionRepository,
 			UserRepository:          mockUserRepository,
 			ErrorResponseHandler:    mockErrorResponse,
-			UserAuthorization:       mockUserAuthorization,
 			SessionUserJoinMediator: mockSessionUserJoinMediator,
 		}
 
@@ -127,7 +121,6 @@ func TestSessionHandlerJoin(t *testing.T) {
 		var mockSessionRepository = &repository.MockSessionRepository{}
 		var mockUserRepository = &repository.MockUserRepository{}
 		var mockErrorResponse = &service.MockErrorResponse{}
-		var mockUserAuthorization = &service.MockUserAuthoriztion{}
 		var mockSessionUserJoinMediator = &MockSessionUserJoinMediator{}
 
 		var claims = domain.Claims{
@@ -141,14 +134,12 @@ func TestSessionHandlerJoin(t *testing.T) {
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
 		c.Params = []gin.Param{{Key: "id", Value: "1"}}
-
-		mockUserAuthorization.On("Authorize", c).Return(&claims, nil)
+		c.Keys = map[string]any{"cliams": claims}
 
 		sut := &SessionHandler{
 			SessionRepository:       mockSessionRepository,
 			UserRepository:          mockUserRepository,
 			ErrorResponseHandler:    mockErrorResponse,
-			UserAuthorization:       mockUserAuthorization,
 			SessionUserJoinMediator: mockSessionUserJoinMediator,
 		}
 
@@ -160,7 +151,6 @@ func TestSessionHandlerJoin(t *testing.T) {
 		var mockSessionRepository = &repository.MockSessionRepository{}
 		var mockUserRepository = &repository.MockUserRepository{}
 		var mockErrorResponse = &service.MockErrorResponse{}
-		var mockUserAuthorization = &service.MockUserAuthoriztion{}
 		var mockSessionUserJoinMediator = &MockSessionUserJoinMediator{}
 		var time, _ = time.Parse("2006-01-02 15:04:00", "2023-06-26 07:00:00")
 
@@ -182,8 +172,8 @@ func TestSessionHandlerJoin(t *testing.T) {
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
 		c.Params = []gin.Param{{Key: "id", Value: "1"}}
+		c.Keys = map[string]any{"cliams": claims}
 
-		mockUserAuthorization.On("Authorize", c).Return(&claims, nil)
 		err := service.NewUnprocessableEntityError("session is not available to join")
 		mockSessionUserJoinMediator.On("Mediate", &session, claims.UserId).Return(err)
 		mockErrorResponse.On("GenerateResponse", err).Return(500, &model.ErrorResponse{Error: "session is not available to join"}).Once()
@@ -192,7 +182,6 @@ func TestSessionHandlerJoin(t *testing.T) {
 			SessionRepository:       mockSessionRepository,
 			UserRepository:          mockUserRepository,
 			ErrorResponseHandler:    mockErrorResponse,
-			UserAuthorization:       mockUserAuthorization,
 			SessionUserJoinMediator: mockSessionUserJoinMediator,
 		}
 

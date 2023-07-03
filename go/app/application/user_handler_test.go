@@ -54,7 +54,7 @@ func TestLogin(t *testing.T) {
 		sut := UserHandler{
 			Repository:           mockUserRepository,
 			ErrorResponseHandler: mockErrorResponse,
-			UserAuthorization:    mockUserAuthorization,
+			AuthToken:            mockUserAuthorization,
 			Validate:             mockValidate,
 			Encryption:           mockAppCrypto,
 		}
@@ -80,7 +80,7 @@ func TestLogin(t *testing.T) {
 		sut := UserHandler{
 			Repository:           mockUserRepository,
 			ErrorResponseHandler: mockErrorResponse,
-			UserAuthorization:    mockUserAuthorization,
+			AuthToken:            mockUserAuthorization,
 			Validate:             mockValidate,
 			Encryption:           mockAppCrypto,
 		}
@@ -112,7 +112,7 @@ func TestLogin(t *testing.T) {
 		sut := UserHandler{
 			Repository:           mockUserRepository,
 			ErrorResponseHandler: mockErrorResponse,
-			UserAuthorization:    mockUserAuthorization,
+			AuthToken:            mockUserAuthorization,
 			Validate:             mockValidate,
 			Encryption:           mockAppCrypto,
 		}
@@ -146,7 +146,7 @@ func TestLogin(t *testing.T) {
 		sut := UserHandler{
 			Repository:           mockUserRepository,
 			ErrorResponseHandler: mockErrorResponse,
-			UserAuthorization:    mockUserAuthorization,
+			AuthToken:            mockUserAuthorization,
 			Validate:             mockValidate,
 			Encryption:           mockAppCrypto,
 		}
@@ -187,7 +187,7 @@ func TestLogin(t *testing.T) {
 		sut := UserHandler{
 			Repository:           mockUserRepository,
 			ErrorResponseHandler: mockErrorResponse,
-			UserAuthorization:    mockUserAuthorization,
+			AuthToken:            mockUserAuthorization,
 			Validate:             mockValidate,
 			Encryption:           mockAppCrypto,
 		}
@@ -228,7 +228,7 @@ func TestLogin(t *testing.T) {
 		sut := UserHandler{
 			Repository:           mockUserRepository,
 			ErrorResponseHandler: mockErrorResponse,
-			UserAuthorization:    mockUserAuthorization,
+			AuthToken:            mockUserAuthorization,
 			Validate:             mockValidate,
 			Encryption:           mockAppCrypto,
 		}

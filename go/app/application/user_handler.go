@@ -12,7 +12,7 @@ import (
 type UserHandler struct {
 	Repository           domain.IUserRepository
 	ErrorResponseHandler service.ErrorResponse
-	UserAuthorization    domain.IUserAuthoriztion
+	AuthToken            domain.IAuthToken
 	Validate             domain.IValidate
 	Encryption           domain.IAppCrypto
 }
@@ -44,7 +44,7 @@ func (ah *UserHandler) Login(c *gin.Context) {
 		return
 	}
 
-	tokenResponse, err := ah.UserAuthorization.GenerateToken(user.Username, user.Id)
+	tokenResponse, err := ah.AuthToken.GenerateToken(user.Username, user.Id)
 
 	if err != nil {
 		c.JSON(ah.ErrorResponseHandler.GenerateResponse(fmt.Errorf("failed to generate JWT token")))

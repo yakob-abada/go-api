@@ -14,7 +14,6 @@ type SessionHandler struct {
 	SessionRepository       domain.ISessionRepository
 	UserRepository          domain.IUserRepository
 	ErrorResponseHandler    service.ErrorResponse
-	UserAuthorization       domain.IUserAuthoriztion
 	SessionUserJoinMediator ISessionUserJoinMediator
 }
 
@@ -41,12 +40,7 @@ func (slh *SessionHandler) GetList(c *gin.Context) {
 }
 
 func (slh *SessionHandler) Join(c *gin.Context) {
-	claims, err := slh.UserAuthorization.Authorize(c)
-
-	if err != nil {
-		c.JSON(slh.ErrorResponseHandler.GenerateResponse(err))
-		return
-	}
+	cliams, _ := c.MustGet("cliams").(domain.Claims)
 
 	session, err := slh.SessionRepository.FindById(c.Param("id"))
 
@@ -56,7 +50,7 @@ func (slh *SessionHandler) Join(c *gin.Context) {
 		return
 	}
 
-	err = slh.SessionUserJoinMediator.Mediate(session, claims.UserId)
+	err = slh.SessionUserJoinMediator.Mediate(session, cliams.UserId)
 
 	if err != nil {
 		c.JSON(slh.ErrorResponseHandler.GenerateResponse(err))

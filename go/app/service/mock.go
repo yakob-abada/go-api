@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
 	"github.com/yakob-abada/go-api/go/app/domain"
 	"github.com/yakob-abada/go-api/go/app/model"
@@ -31,8 +30,8 @@ func (mua *MockUserAuthoriztion) GenerateToken(username string, userId int8) (*d
 	return args.Get(0).(*domain.TokenResponse), args.Error(1)
 }
 
-func (mua *MockUserAuthoriztion) Authorize(c *gin.Context) (*domain.Claims, error) {
-	args := mua.Called(c)
+func (mua *MockUserAuthoriztion) Validate(token string) (*domain.Claims, error) {
+	args := mua.Called(token)
 
 	return args.Get(0).(*domain.Claims), args.Error(1)
 }
