@@ -15,12 +15,12 @@ func (mer *MockErrorResponse) GenerateResponse(err error) (int, *domain.ErrorRes
 	return args.Get(0).(int), args.Get(1).(*domain.ErrorResponse)
 }
 
-type MockUserAuthoriztion struct {
+type MockAuthToken struct {
 	mock.Mock
 }
 
-func (mua *MockUserAuthoriztion) GenerateToken(username string, userId int8) (*domain.TokenResponse, error) {
-	args := mua.Called(username, userId)
+func (mat *MockAuthToken) GenerateToken(username string, userId int8) (*domain.TokenResponse, error) {
+	args := mat.Called(username, userId)
 
 	if args.Error(1) != nil {
 		return nil, args.Error(1)
@@ -29,8 +29,8 @@ func (mua *MockUserAuthoriztion) GenerateToken(username string, userId int8) (*d
 	return args.Get(0).(*domain.TokenResponse), args.Error(1)
 }
 
-func (mua *MockUserAuthoriztion) Validate(token string) (*domain.Claims, error) {
-	args := mua.Called(token)
+func (mat *MockAuthToken) Validate(token string) (*domain.Claims, error) {
+	args := mat.Called(token)
 
 	return args.Get(0).(*domain.Claims), args.Error(1)
 }

@@ -39,7 +39,7 @@ func (slh *SessionHandler) GetList(c *gin.Context) {
 }
 
 func (slh *SessionHandler) Join(c *gin.Context) {
-	cliams, _ := c.MustGet("cliams").(domain.Claims)
+	cliams, _ := c.MustGet("cliams").(*domain.Claims)
 
 	session, err := slh.SessionRepository.FindById(c.Param("id"))
 

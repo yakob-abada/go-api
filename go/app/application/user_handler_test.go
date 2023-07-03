@@ -20,7 +20,7 @@ func TestLogin(t *testing.T) {
 		var mockUserRepository = &repository.MockUserRepository{}
 		var mockErrorResponse = &service.MockErrorResponse{}
 		var mockValidate = &MockValidate{}
-		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockUserAuthorization = &service.MockAuthToken{}
 		var mockAppCrypto = &service.MockAppCrypto{}
 
 		user := entity.User{
@@ -65,7 +65,7 @@ func TestLogin(t *testing.T) {
 		var mockUserRepository = &repository.MockUserRepository{}
 		var mockErrorResponse = &service.MockErrorResponse{}
 		var mockValidate = &MockValidate{}
-		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockUserAuthorization = &service.MockAuthToken{}
 		var mockAppCrypto = &service.MockAppCrypto{}
 
 		gin.SetMode(gin.TestMode)
@@ -91,7 +91,7 @@ func TestLogin(t *testing.T) {
 		var mockUserRepository = &repository.MockUserRepository{}
 		var mockErrorResponse = &service.MockErrorResponse{}
 		var mockValidate = &MockValidate{}
-		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockUserAuthorization = &service.MockAuthToken{}
 		var mockAppCrypto = &service.MockAppCrypto{}
 
 		gin.SetMode(gin.TestMode)
@@ -123,7 +123,7 @@ func TestLogin(t *testing.T) {
 		var mockUserRepository = &repository.MockUserRepository{}
 		var mockErrorResponse = &service.MockErrorResponse{}
 		var mockValidate = &MockValidate{}
-		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockUserAuthorization = &service.MockAuthToken{}
 		var mockAppCrypto = &service.MockAppCrypto{}
 
 		gin.SetMode(gin.TestMode)
@@ -157,7 +157,7 @@ func TestLogin(t *testing.T) {
 		var mockUserRepository = &repository.MockUserRepository{}
 		var mockErrorResponse = &service.MockErrorResponse{}
 		var mockValidate = &MockValidate{}
-		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockUserAuthorization = &service.MockAuthToken{}
 		var mockAppCrypto = &service.MockAppCrypto{}
 
 		user := entity.User{
@@ -198,7 +198,7 @@ func TestLogin(t *testing.T) {
 		var mockUserRepository = &repository.MockUserRepository{}
 		var mockErrorResponse = &service.MockErrorResponse{}
 		var mockValidate = &MockValidate{}
-		var mockUserAuthorization = &service.MockUserAuthoriztion{}
+		var mockUserAuthorization = &service.MockAuthToken{}
 		var mockAppCrypto = &service.MockAppCrypto{}
 
 		user := entity.User{

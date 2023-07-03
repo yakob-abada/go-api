@@ -43,7 +43,7 @@ func (ua *UserAuth) Authenticate() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("cliams", *cliams)
+		c.Set("cliams", cliams)
 
 		c.Next()
 	}

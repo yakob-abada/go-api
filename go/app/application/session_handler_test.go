@@ -100,7 +100,7 @@ func TestSessionHandlerJoin(t *testing.T) {
 		gin.SetMode(gin.TestMode)
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
-		c.Keys = map[string]any{"cliams": claims}
+		c.Set("cliams", &claims)
 		c.Params = []gin.Param{{Key: "id", Value: "1"}}
 
 		mockSessionUserJoinMediator.On("Mediate", &session, claims.UserId).Return(nil)
@@ -133,7 +133,7 @@ func TestSessionHandlerJoin(t *testing.T) {
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
 		c.Params = []gin.Param{{Key: "id", Value: "1"}}
-		c.Keys = map[string]any{"cliams": claims}
+		c.Set("cliams", &claims)
 
 		sut := &SessionHandler{
 			SessionRepository:       mockSessionRepository,
@@ -171,7 +171,7 @@ func TestSessionHandlerJoin(t *testing.T) {
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
 		c.Params = []gin.Param{{Key: "id", Value: "1"}}
-		c.Keys = map[string]any{"cliams": claims}
+		c.Set("cliams", &claims)
 
 		err := service.NewUnprocessableEntityError("session is not available to join")
 		mockSessionUserJoinMediator.On("Mediate", &session, claims.UserId).Return(err)
