@@ -43,7 +43,7 @@ func (sr *SessionRepository) FindById(id string) (*entity.Session, error) {
 }
 
 func (sr *SessionRepository) FindAll() ([]entity.Session, error) {
-	var sessions []entity.Session
+	sessions := []entity.Session{}
 
 	db, err := sr.dBConnection.Connect()
 
@@ -76,7 +76,7 @@ func (sr *SessionRepository) FindAll() ([]entity.Session, error) {
 }
 
 func (sr *SessionRepository) FindActive() ([]entity.Session, error) {
-	var sessions []entity.Session
+	sessions := []entity.Session{}
 
 	db, err := sr.dBConnection.Connect()
 
